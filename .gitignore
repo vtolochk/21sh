@@ -3,3 +3,5 @@
 CMake*
 a.out
 cmake*
+.idea*
+.DS*
