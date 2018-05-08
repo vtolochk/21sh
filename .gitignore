@@ -1,0 +1,5 @@
+21sh
+*.o
+CMake*
+a.out
+cmake*
