@@ -14,9 +14,10 @@
 
 NAME = 21sh
 
-HEADER = includes/sh21.h
+HEADER = includes/shell.h
 
-SRCS = srcs/main.c
+SRCS = srcs/shell.c srcs/env_functions.c srcs/signals.c srcs/shell_loop.c \
+srcs/print_prompt.c
 
 OBJ = $(SRCS:.c=.o)
 

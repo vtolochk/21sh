@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   print_prompt.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vtolochk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vtolochk <vtolochk@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/08 16:39:23 by vtolochk          #+#    #+#             */
-/*   Updated: 2018/05/08 16:44:54 by vtolochk         ###   ########.fr       */
+/*   Created: 2018/05/11 12:41:00 by vtolochk          #+#    #+#             */
+/*   Updated: 2018/05/11 12:41:00 by vtolochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/sh21.h"
+#include "shell.h"
 
-int main(void)
+void print_prompt(void)
 {
-	ft_printf("hello 21sh\n");
-	return (0);
+	ft_putstr_fd(BLUE, 1);
+	ft_putstr_fd("$> ", 1);
+	ft_putstr_fd(EOC, 1);
 }

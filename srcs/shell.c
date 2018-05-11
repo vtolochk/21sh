@@ -1,18 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh21.h                                             :+:      :+:    :+:   */
+/*   shell.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vtolochk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/08 16:34:15 by vtolochk          #+#    #+#             */
-/*   Updated: 2018/05/08 16:45:18 by vtolochk         ###   ########.fr       */
+/*   Created: 2018/05/08 16:39:23 by vtolochk          #+#    #+#             */
+/*   Updated: 2018/05/08 16:44:54 by vtolochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SH21_H
-# define SH21_H
+#include "shell.h"
 
-#include "../Libft/includes/libft.h"
+void shell_init(char **env)
+{
+	g_data.environ = copy_env(env);
+}
 
-#endif
+void shell_exit(void)
+{
+	// FREE
+}
+
+int				main(int argc, char **argv, char **env)
+{
+	(void)argc;
+	(void)argv;
+	shell_init(env);
+	shell_loop();
+	shell_exit();
+	return (0);
+}
