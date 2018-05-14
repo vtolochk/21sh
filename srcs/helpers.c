@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_prompt.c                                     :+:      :+:    :+:   */
+/*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vtolochk <vtolochk@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/11 12:41:00 by vtolochk          #+#    #+#             */
-/*   Updated: 2018/05/11 12:41:00 by vtolochk         ###   ########.fr       */
+/*   Created: 2018/05/14 16:32:00 by vtolochk          #+#    #+#             */
+/*   Updated: 2018/05/14 16:32:00 by vtolochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void print_prompt(void)
+int			print_command(int sign)
 {
-	ft_putstr_fd(BLUE, 1);
-	ft_putstr_fd("prompt ;) $> ", 1);
-	ft_putstr_fd(EOC, 1);
+	write(STDIN_FILENO, &sign, 1);
+	return (1);
+}
+
+void        print_capability_name(char *name)
+{
+	tputs(tgetstr(name, NULL), 1, &print_command);
 }

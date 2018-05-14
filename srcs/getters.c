@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_prompt.c                                     :+:      :+:    :+:   */
+/*   getters.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vtolochk <vtolochk@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/11 12:41:00 by vtolochk          #+#    #+#             */
-/*   Updated: 2018/05/11 12:41:00 by vtolochk         ###   ########.fr       */
+/*   Created: 2018/05/14 10:30:00 by vtolochk          #+#    #+#             */
+/*   Updated: 2018/05/14 10:30:00 by vtolochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void print_prompt(void)
+void	get_screen_size(void)
 {
-	ft_putstr_fd(BLUE, 1);
-	ft_putstr_fd("prompt ;) $> ", 1);
-	ft_putstr_fd(EOC, 1);
+	ioctl(STDERR_FILENO, TIOCGWINSZ, &g_data.win_size);
 }

@@ -12,48 +12,36 @@
 
 #include "shell.h"
 
-void	set_raw_mode(struct termios *old_tty)
+void init_buffs(void)
 {
-	struct termios tty;
-
-	tgetent(NULL, getenv("TERM"));
-	tcgetattr(0, &tty);
-	*old_tty = tty;
-	tty.c_lflag &= ECHO;
-	tty.c_lflag &= ICANON;
-	//tty.c_lflag &= ECHOCTL;
-	tty.c_cc[VMIN] = 1;
-	tcsetattr(0, TCSAFLUSH, &tty);
+	ft_bzero(g_data.command, 4096);
+	ft_bzero(&g_data.current_char[0], 8);
 }
 
-int read_command(void)
+void execute_command(void)
 {
-	char key[8];
-	//char buf[4096];
-	read(0, key, 8);
-//	if (ret == 8)
-//	{
-//
-//		return (0);
-//	}
-	//ft_printf("ret: %d, %s\n", ret, key);
-	if (key[0] == 'q')
-		return (1);
-	if (key[0] == 'p')
-		print_env();
-	return 0;
+	if (ft_strequ(g_data.command, "exit") == 1)
+		shell_exit();
 }
 
 void shell_loop(void)
 {
-	struct termios old_tty;
-	set_raw_mode(&old_tty);
+	print_prompt();
 	while (1)
 	{
 		signals();
-		print_prompt();
-		if (read_command() == 1)
-			break;
+		get_screen_size();
+		read(STDIN_FILENO, &g_data.current_char, 8);
+		if (g_data.current_char[0] == ENTER)
+		{
+			write(STDOUT_FILENO, "\n", 1);
+			//parse_command();
+			execute_command();
+			print_prompt();
+			init_buffs();
+		}
+		write(STDOUT_FILENO, &g_data.current_char[0], 1);
+		ft_strcat(g_data.command, g_data.current_char);
+		cursor_actions();
 	}
-	tcsetattr(0, TCSAFLUSH, &old_tty);
 }

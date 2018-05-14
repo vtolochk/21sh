@@ -17,7 +17,8 @@ NAME = 21sh
 HEADER = includes/shell.h
 
 SRCS = srcs/shell.c srcs/env_functions.c srcs/signals.c srcs/shell_loop.c \
-srcs/print_prompt.c
+srcs/print_prompt.c srcs/mods.c srcs/getters.c srcs/cursor_actions.c srcs/helpers.c \
+
 
 OBJ = $(SRCS:.c=.o)
 

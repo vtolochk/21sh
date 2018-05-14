@@ -26,6 +26,17 @@
 # define RED "\e[38;5;197m"
 # define BLUE "\e[38;5;69m"
 
+# define ESC 27
+# define ENTER 10
+# define BACKSPACE 127
+# define ARROW_UP "[A"
+# define ARROW_DOWN "[B"
+# define ARROW_LEFT "[D"
+# define ARROW_RIGHT "[C"
+
+# define FAIL 1
+# define OK 0
+
 typedef struct s_env
 {
 	char *name;
@@ -35,17 +46,30 @@ typedef struct s_env
 
 typedef struct s_shell
 {
+	int command_len;
 	t_env *environ;
+	char current_char[8];
+	char command[4096];
+	struct termios tty;
+	struct termios old_tty;
+	struct winsize win_size;
 }               t_shell;
 
 t_shell g_data;
 
 t_env		*copy_env(char **env);
 void        print_env(void);
+void        init_buffs(void);
 void        shell_init(char **env);
 void        shell_loop(void);
 void        shell_exit(void);
 void		signals(void);
 void        print_prompt(void);
+void        set_old_mode(void);
+int         set_shell_mode(void);
+void	    get_screen_size(void);
+void        cursor_actions(void);
+int			print_command(int sign);
+void        print_capability_name(char *name);
 
 #endif

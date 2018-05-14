@@ -21,6 +21,7 @@ static void		sig_processing(int sig_num)
 
 void			signals(void)
 {
+	// WINCHANGE
 	signal(SIGINT, sig_processing);
 	signal(SIGSTOP, sig_processing);
 	signal(SIGCONT, sig_processing);
