@@ -26,6 +26,7 @@
 # define RED "\e[38;5;197m"
 # define BLUE "\e[38;5;69m"
 
+# define TAB '\t'
 # define ESC 27
 # define ENTER 10
 # define BACKSPACE 127
@@ -46,6 +47,7 @@ typedef struct s_env
 
 typedef struct s_shell
 {
+	int x_cursor;
 	int command_len;
 	t_env *environ;
 	char current_char[8];
@@ -59,7 +61,7 @@ t_shell g_data;
 
 t_env		*copy_env(char **env);
 void        print_env(void);
-void        init_buffs(void);
+void        annulment(void);
 void        shell_init(char **env);
 void        shell_loop(void);
 void        shell_exit(void);
@@ -70,6 +72,6 @@ int         set_shell_mode(void);
 void	    get_screen_size(void);
 void        cursor_actions(void);
 int			print_command(int sign);
-void        print_capability_name(char *name);
+void        print_capability(char *name);
 
 #endif

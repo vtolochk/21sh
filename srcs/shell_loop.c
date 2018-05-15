@@ -12,8 +12,10 @@
 
 #include "shell.h"
 
-void init_buffs(void)
+void annulment(void)
 {
+	g_data.x_cursor = 0;
+	g_data.command_len = 0;
 	ft_bzero(g_data.command, 4096);
 	ft_bzero(&g_data.current_char[0], 8);
 }
@@ -38,10 +40,13 @@ void shell_loop(void)
 			//parse_command();
 			execute_command();
 			print_prompt();
-			init_buffs();
+			annulment();
+			continue ;
 		}
-		write(STDOUT_FILENO, &g_data.current_char[0], 1);
-		ft_strcat(g_data.command, g_data.current_char);
+		else if (g_data.current_char[0] == TAB)
+		{
+			continue; //autocompl
+		}
 		cursor_actions();
 	}
 }

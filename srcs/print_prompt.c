@@ -12,9 +12,20 @@
 
 #include "shell.h"
 
-void print_prompt(void)
+//void print_prompt(void)
+//{
+//	ft_putstr_fd(BLUE, 1);
+//	ft_putstr_fd("prompt ;) $> ", 1);
+//	ft_putstr_fd(EOC, 1);
+//}
+void		print_prompt(void)
 {
-	ft_putstr_fd(BLUE, 1);
-	ft_putstr_fd("prompt ;) $> ", 1);
-	ft_putstr_fd(EOC, 1);
+	char *pwd;
+	char *name;
+	char host[255];
+
+	gethostname(host, 255);
+	pwd = "home";
+	name = "vtolochk";
+	ft_printf("%magenta%[%s]%yellow%[%s]%eoc%%green%[%s]%eoc% $>", name, host, pwd);
 }

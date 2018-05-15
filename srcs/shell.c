@@ -14,8 +14,7 @@
 
 void shell_init(char **env)
 {
-	init_buffs();
-	g_data.command_len = 0;
+	annulment();
 	g_data.environ = copy_env(env);
 	if (set_shell_mode() == FAIL)
 		shell_exit();
