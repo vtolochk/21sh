@@ -47,10 +47,10 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	int x_cursor;
-	int command_len;
+	char key[8];
+	int cursor_x;
 	t_env *environ;
-	char current_char[8];
+	int command_len;
 	char command[4096];
 	struct termios tty;
 	struct termios old_tty;
@@ -71,6 +71,8 @@ void        set_old_mode(void);
 int         set_shell_mode(void);
 void	    get_screen_size(void);
 void        cursor_actions(void);
+void        delete_char(void);
+void        insert_char(void);
 int			print_command(int sign);
 void        print_capability(char *name);
 
