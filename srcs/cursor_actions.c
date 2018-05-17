@@ -12,29 +12,58 @@
 
 #include "shell.h"
 
+void move_cursor_up(void)
+{
+
+}
+
+void move_cursor_down(void)
+{
+
+}
+
+void move_cursor_right(void)
+{
+	if (g_data.cursor_x % (g_data.win_size.ws_col - 2) == 0)
+		capability("do");
+	else
+		capability("nd");
+	g_data.cursor_x++;
+}
+
+void move_cursor_left(void)
+{
+	if (g_data.cursor_x % (g_data.win_size.ws_col - 1) == 0)
+	{
+		capability("up");
+		for (int i = 0; i < g_data.cursor_x + g_data.prompt_len; ++i)
+			capability("nd");
+	}
+	else
+		capability("le");
+	g_data.cursor_x--;
+}
+
 void cursor_actions(void)
 {
-	print_capability("im");
+	capability("im");
 	if (ft_strequ(&g_data.key[1], ARROW_UP))
 		return ; // history up
 	else if (ft_strequ(&g_data.key[1], ARROW_DOWN))
 		return ; // history down
-	else if (ft_strequ(&g_data.key[1], ARROW_LEFT) && g_data.cursor_x > 0)
-	{
-		g_data.cursor_x--;
-		print_capability("le");
-	}
-	else if(ft_strequ(&g_data.key[1], ARROW_RIGHT) && g_data.cursor_x < g_data.command_len)
-	{
-		g_data.cursor_x++;
-		print_capability("nd");
-	}
-	else if (g_data.key[0] == BACKSPACE && g_data.cursor_x > 0)
+	else if (ft_strequ(&g_data.key[1], CTRL_UP) && g_data.rows > 0)
+		move_cursor_up();
+	else if (ft_strequ(&g_data.key[1], CTRL_DOWN) && g_data.rows > 0)
+		move_cursor_down();
+	else if (ft_strequ(&g_data.key[1], ARROW_LEFT) && g_data.cursor_x > g_data.prompt_len)
+		move_cursor_left();
+	else if(ft_strequ(&g_data.key[1], ARROW_RIGHT) && g_data.cursor_x < g_data.command_len + g_data.prompt_len)
+		move_cursor_right();
+	else if (g_data.key[0] == BACKSPACE && g_data.cursor_x > g_data.prompt_len)
 		delete_char();
 	else if (ft_isprint(g_data.key[0]))
 		insert_char();
-	print_capability("ei");
-	ft_bzero(&g_data.key[0], sizeof(g_data.key));
+	capability("ei");
 }
 
 

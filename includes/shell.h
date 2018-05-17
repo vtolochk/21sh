@@ -34,6 +34,8 @@
 # define ARROW_DOWN "[B"
 # define ARROW_LEFT "[D"
 # define ARROW_RIGHT "[C"
+# define CTRL_UP    "[1;5A"
+# define CTRL_DOWN  "[1;5B"
 
 # define FAIL 1
 # define OK 0
@@ -48,8 +50,10 @@ typedef struct s_env
 typedef struct s_shell
 {
 	char key[8];
+	int rows;
 	int cursor_x;
 	t_env *environ;
+	int prompt_len;
 	int command_len;
 	char command[4096];
 	struct termios tty;
@@ -74,6 +78,8 @@ void        cursor_actions(void);
 void        delete_char(void);
 void        insert_char(void);
 int			print_command(int sign);
-void        print_capability(char *name);
+void        capability(char *name);
+void        move_cursor_left(void);
+void        move_cursor_right(void);
 
 #endif

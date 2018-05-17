@@ -14,10 +14,11 @@
 
 void shell_init(char **env)
 {
-	annulment();
 	g_data.environ = copy_env(env);
 	if (set_shell_mode() == FAIL)
 		shell_exit();
+	print_prompt();
+	annulment();
 }
 
 void shell_exit(void)

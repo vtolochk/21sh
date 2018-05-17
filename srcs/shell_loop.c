@@ -14,8 +14,9 @@
 
 void annulment(void)
 {
-	g_data.cursor_x = 0;
+	g_data.rows = 1;
 	g_data.command_len = 0;
+	g_data.cursor_x = g_data.prompt_len;
 	ft_bzero(g_data.command, 4096);
 	ft_bzero(&g_data.key[0], 8);
 }
@@ -28,7 +29,7 @@ void execute_command(void)
 
 void shell_loop(void)
 {
-	print_prompt();
+
 	while (1)
 	{
 		signals();
@@ -48,5 +49,6 @@ void shell_loop(void)
 			//autocomplete
 		}
 		cursor_actions();
+		ft_bzero(&g_data.key[0], sizeof(g_data.key));
 	}
 }

@@ -18,7 +18,7 @@ int			print_command(int sign)
 	return (1);
 }
 
-void        print_capability(char *name)
+void        capability(char *name)
 {
 	tputs(tgetstr(name, NULL), 1, &print_command);
 }
