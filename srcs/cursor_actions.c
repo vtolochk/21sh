@@ -24,8 +24,11 @@ void move_cursor_down(void)
 
 void move_cursor_right(void)
 {
-	if (g_data.cursor_x % (g_data.win_size.ws_col - 2) == 0)
+	if (g_data.cursor_x % (g_data.win_size.ws_col - 1) == 0)
+	{
 		capability("do");
+		capability("cr");
+	}
 	else
 		capability("nd");
 	g_data.cursor_x++;
@@ -33,10 +36,11 @@ void move_cursor_right(void)
 
 void move_cursor_left(void)
 {
-	if (g_data.cursor_x % (g_data.win_size.ws_col - 1) == 0)
+	int i = 0;
+	if (g_data.cursor_x % g_data.win_size.ws_col == 0)
 	{
 		capability("up");
-		for (int i = 0; i < g_data.cursor_x + g_data.prompt_len; ++i)
+		while (i++ < g_data.win_size.ws_col - 1)
 			capability("nd");
 	}
 	else
