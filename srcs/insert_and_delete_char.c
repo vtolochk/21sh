@@ -24,11 +24,13 @@ void delete_char(void)
 	ft_strcat(g_data.command, second_part);
 	ft_strdel(&first_part);
 	ft_strdel(&second_part);
-	capability("le");
-	capability("dc");
-	g_data.cursor_x--;
 	g_data.command_len--;
+
+
+	capability("dc");
+	move_cursor_left();
 }
+
 
 void insert_char(void)
 {
@@ -37,25 +39,31 @@ void insert_char(void)
 	char *new_tail;
 
 	capability("sc");
-	capability("ce");
-	if (g_data.cursor_x % g_data.win_size.ws_col == 0)
-	{
-		capability("do");
-		capability("sc");
-		capability("ce");
-	}
+
 	tail = ft_strsub(g_data.command, g_data.cursor_x - g_data.prompt_len, g_data.command_len);
 	head = ft_strsub(g_data.command, 0, g_data.cursor_x - g_data.prompt_len);
 	new_tail = ft_strjoin(&g_data.key[0], tail);
 	ft_bzero(g_data.command, 4096);
 	ft_strcat(g_data.command, head);
 	ft_strcat(g_data.command, new_tail);
+
+	capability("ce");
+	capability("do");
+	capability("cr");
+	capability("cd");
+	capability("rc");
+	capability("sc");
+
 	ft_putstr_fd(new_tail, 1);
 	capability("rc");
-	capability("nd");
-	g_data.cursor_x++;
-	g_data.command_len++;
+	move_cursor_right();
+
+//	if (g_data.key[0] == 'w')
+//	{
+//		ft_printf("x:|%d|", g_data.cursor_x);
+//	}
 	ft_strdel(&tail);
 	ft_strdel(&head);
 	ft_strdel(&new_tail);
+	g_data.command_len++;
 }

@@ -35,5 +35,5 @@ int				main(int argc, char **argv, char **env)
 	shell_init(env);
 	shell_loop();
 	shell_exit();
-	return (0);
+	return (OK);
 }
