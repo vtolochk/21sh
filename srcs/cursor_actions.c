@@ -24,10 +24,11 @@ void move_cursor_down(void)
 
 void move_cursor_right(void)
 {
-	if (g_data.cursor_x % g_data.win_size.ws_col == 0)
+	if ((g_data.cursor_x + 1) % g_data.win_size.ws_col == 0)
 	{
 		capability("do");
 		capability("cr");
+		g_data.rows++;
 	}
 	else
 		capability("nd");
@@ -36,14 +37,24 @@ void move_cursor_right(void)
 
 void move_cursor_left(void)
 {
-	capability("le");
+	int i;
+
+	i = 0;
+	if (g_data.cursor_x % g_data.win_size.ws_col == 0)
+	{
+		capability("up");
+		while (i++ < g_data.win_size.ws_col)
+			capability("nd");
+		g_data.rows--;
+	}
+	else
+		capability("le");
 	g_data.cursor_x--;
 }
 
 void cursor_actions(void)
 {
 	capability("im");
-	//ft_printf("x: |%d|\t", g_data.cursor_x);
 	if (ft_strequ(&g_data.key[1], ARROW_UP))
 		return ; // history up
 	else if (ft_strequ(&g_data.key[1], ARROW_DOWN))

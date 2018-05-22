@@ -16,7 +16,7 @@ static void		sig_processing(int sig_num)
 {
 	if (sig_num == SIGINT || sig_num == SIGABRT || sig_num == SIGSTOP
 	    || sig_num == SIGKILL || sig_num == SIGQUIT || sig_num == SIGTERM)
-		write(1, "\n", 1);
+		shell_exit();
 	else if (sig_num == SIGWINCH)
 	{
 		/**	TODO 42sh:

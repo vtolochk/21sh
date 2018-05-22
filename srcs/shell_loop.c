@@ -43,6 +43,7 @@ void shell_loop(void)
 				write(STDOUT_FILENO, "\n", 1);
 
 			//parse_command();
+			ft_printf("|%s|\n", g_data.command);
 			execute_command();
 			print_prompt();
 			annulment();
