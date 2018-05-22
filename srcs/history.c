@@ -1,32 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mods.c                                             :+:      :+:    :+:   */
+/*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vtolochk <vtolochk@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/14 09:32:00 by vtolochk          #+#    #+#             */
-/*   Updated: 2018/05/14 09:32:00 by vtolochk         ###   ########.fr       */
+/*   Created: 2018/05/22 17:57:00 by vtolochk          #+#    #+#             */
+/*   Updated: 2018/05/22 17:57:00 by vtolochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int	set_shell_mode(void)
+void history_up(void)
 {
-	if (tgetent(NULL, getenv("TERM")) == -1)
-		return (FAIL);
-	if (tcgetattr(0, &g_data.tty) == -1)
-		return (FAIL);
-	g_data.old_tty = g_data.tty;
-	g_data.tty.c_lflag &= ~(ECHO | ICANON);
-	g_data.tty.c_cc[VMIN] = 1;
-	g_data.tty.c_cc[VTIME] = 0;
-	tcsetattr(0, TCSAFLUSH, &g_data.tty);
-	return (OK);
+
 }
 
-void	set_old_mode(void)
+void history_down(void)
 {
-	tcsetattr(0, TCSAFLUSH, &g_data.old_tty);
+
+}
+
+t_history *history_new_node(void)
+{
+	t_history new_node;
+
+	new_node = (t_history *)malloc(sizeof(t_history));
+	new_node->command = ft_strdup(g_data.command);
+	new_node->next = NULL;
+	new_node->prev = NULL;
+	return (new_node);
+}
+
+void history_push_back(t_history *new_node)
+{
+	
+}
+
+void free_history(void)
+{
+
 }

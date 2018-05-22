@@ -13,14 +13,14 @@
 #ifndef SHELL_H
 # define SHELL_H
 
-//global list variable for environment variables
-
-
-#include "../Libft/includes/libft.h"
 #include <termios.h>
 #include <term.h>
 #include <termcap.h>
 #include <sys/ioctl.h>
+
+#include "../Libft/includes/libft.h"
+#include "structures.h"
+#include "moves.h"
 
 # define EOC "\e[0m"
 # define RED "\e[38;5;197m"
@@ -28,6 +28,8 @@
 
 # define TAB '\t'
 # define ESC 27
+# define END    "[F"
+# define HOME   "[H"
 # define ENTER 10
 # define BACKSPACE 127
 # define ARROW_UP "[A"
@@ -36,32 +38,14 @@
 # define ARROW_RIGHT "[C"
 # define CTRL_UP    "[1;5A"
 # define CTRL_DOWN  "[1;5B"
+# define CTRL_RIGHT "[1;5C"
+# define CTRL_LEFT  "[1;5D"
 
 # define FAIL 1
 # define OK 0
 
-typedef struct s_env
-{
-	char *name;
-	char *value;
-	struct s_env *next;
-}               t_env;
-
-typedef struct s_shell
-{
-	char key[8];
-	int rows;
-	int cursor_x;
-	t_env *environ;
-	int prompt_len;
-	int command_len;
-	char command[4096];
-	struct termios tty;
-	struct termios old_tty;
-	struct winsize win_size;
-}               t_shell;
-
 t_shell g_data;
+//global list variable for environment variables
 
 t_env		*copy_env(char **env);
 void        print_env(void);
@@ -79,7 +63,5 @@ void        delete_char(void);
 void        insert_char(void);
 int			print_command(int sign);
 void        capability(char *name);
-void        move_cursor_left(void);
-void        move_cursor_right(void);
 
 #endif

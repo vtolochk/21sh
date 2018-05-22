@@ -14,11 +14,12 @@
 
 NAME = 21sh
 
-HEADER = includes/shell.h
+HEADER = includes/shell.h includes/moves.h includes/structures.h
 
 SRCS = srcs/shell.c srcs/env_functions.c srcs/signals.c srcs/shell_loop.c \
-srcs/print_prompt.c srcs/mods.c srcs/getters.c srcs/cursor_actions.c srcs/helpers.c \
-srcs/insert_and_delete_char.c
+srcs/print_prompt.c srcs/mods.c srcs/getters.c srcs/helpers.c \
+srcs/insert_and_delete_char.c  srcs/cursor/cursor_actions.c \
+srcs/cursor/moves_1.c srcs/cursor/moves_2.c srcs/history.c
 
 OBJ = $(SRCS:.c=.o)
 

@@ -14,9 +14,9 @@
 
 void annulment(void)
 {
-	g_data.rows = 1;
+	g_data.line = 1;
 	g_data.command_len = 0;
-	g_data.cursor_x = g_data.prompt_len;
+	g_data.cursor = g_data.prompt_len;
 	ft_bzero(g_data.command, 4096);
 	ft_bzero(&g_data.key[0], 8);
 }
@@ -37,11 +37,7 @@ void shell_loop(void)
 		read(STDIN_FILENO, &g_data.key, sizeof(g_data.key));
 		if (g_data.key[0] == ENTER)
 		{
-
-			int i = 0;
-			while (i++ < g_data.rows)
-				write(STDOUT_FILENO, "\n", 1);
-
+			write(STDOUT_FILENO, "\n", 1); // how many lines ???
 			//parse_command();
 			ft_printf("|%s|\n", g_data.command);
 			execute_command();
