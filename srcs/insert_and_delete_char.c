@@ -16,13 +16,25 @@ static void clean_and_print(char *str)
 {
 	capability("sc");
 	capability("ce");
-	capability("do");
-	capability("cr");
-	capability("cd");
+	if (g_data.line > 1)
+	{
+		capability("nl");
+		capability("cr");
+		capability("cd");
+
+	}
 	capability("rc");
 	capability("sc");
 	ft_putstr_fd(str, 1);
 	capability("rc");
+
+	//int cur = g_data.cursor;
+//	while (g_data.cursor < g_data.command_len)
+//	{
+//		move_cursor_right();
+//		ft_putstr_fd("\r", 1);
+//	}
+	//ft_putstr_fd(str, 1);
 }
 
 void delete_char(void)

@@ -13,14 +13,11 @@
 #ifndef SHELL_H
 # define SHELL_H
 
+#include "../Libft/includes/libft.h"
 #include <termios.h>
 #include <term.h>
 #include <termcap.h>
 #include <sys/ioctl.h>
-
-#include "../Libft/includes/libft.h"
-#include "structures.h"
-#include "moves.h"
 
 # define EOC "\e[0m"
 # define RED "\e[38;5;197m"
@@ -44,6 +41,37 @@
 # define FAIL 1
 # define OK 0
 
+typedef struct s_env
+{
+	char *name;
+	char *value;
+	struct s_env *next;
+}               t_env;
+
+typedef struct s_history
+{
+	char *command;
+	struct s_history *next;
+	struct s_history *prev;
+}               t_history;
+
+typedef struct s_shell
+{
+	int line;
+	int cursor;
+	char key[8];
+	t_env *environ;
+	t_history *list;
+	int prompt_len;
+	int command_len;
+	char buffer[4096];
+	char command[4096];
+	struct termios tty;
+	struct termios old_tty;
+	struct winsize win_size;
+}               t_shell;
+
+
 t_shell g_data;
 //global list variable for environment variables
 
@@ -63,5 +91,14 @@ void        delete_char(void);
 void        insert_char(void);
 int			print_command(int sign);
 void        capability(char *name);
+
+void    move_cursor_home(void);
+void    move_cursor_end(void);
+void    move_cursor_to_the_next_word(void);
+void    move_cursor_to_the_prev_word(void);
+void    move_cursor_right(void);
+void    move_cursor_left(void);
+void    move_cursor_up(void);
+void    move_cursor_down(void);
 
 #endif
