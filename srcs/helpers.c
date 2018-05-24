@@ -22,3 +22,9 @@ void        capability(char *name)
 {
 	tputs(tgetstr(name, NULL), 1, &print_command);
 }
+
+void        capability_n(char *name, int n)
+{
+	tputs(tgoto(tgetstr(name, 0), 0, n), 1, &print_command);
+}
+

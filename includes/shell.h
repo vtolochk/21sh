@@ -91,6 +91,7 @@ void        delete_char(void);
 void        insert_char(void);
 int			print_command(int sign);
 void        capability(char *name);
+void        capability_n(char *name, int n);
 
 void    move_cursor_home(void);
 void    move_cursor_end(void);

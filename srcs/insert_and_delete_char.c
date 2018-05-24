@@ -12,31 +12,6 @@
 
 #include "shell.h"
 
-static void clean_and_print(char *str)
-{
-	capability("sc");
-	capability("ce");
-	if (g_data.line > 1)
-	{
-		capability("nl");
-		capability("cr");
-		capability("cd");
-
-	}
-	capability("rc");
-	capability("sc");
-	ft_putstr_fd(str, 1);
-	capability("rc");
-
-	//int cur = g_data.cursor;
-//	while (g_data.cursor < g_data.command_len)
-//	{
-//		move_cursor_right();
-//		ft_putstr_fd("\r", 1);
-//	}
-	//ft_putstr_fd(str, 1);
-}
-
 void delete_char(void)
 {
 	char *tail;
@@ -51,7 +26,10 @@ void delete_char(void)
 		ft_strcat(g_data.command, tail);
 		g_data.command_len--;
 		move_cursor_left();
-		clean_and_print(tail);
+		capability("cd");
+		ft_putstr_fd(tail, 1);
+		if (ft_strlen(tail) > 0)
+			capability_n("LE", ft_strlen(tail));
 		ft_strdel(&tail);
 		ft_strdel(&head);
 	}
@@ -70,7 +48,9 @@ void insert_char(void)
 	ft_strcat(g_data.command, head);
 	ft_strcat(g_data.command, new_tail);
 	g_data.command_len++;
-	clean_and_print(new_tail);
+	capability("cd");
+	ft_putstr_fd(new_tail, 1);
+	capability_n("LE", ft_strlen(new_tail));
 	move_cursor_right();
 	ft_strdel(&tail);
 	ft_strdel(&head);
