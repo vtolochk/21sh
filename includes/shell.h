@@ -14,10 +14,14 @@
 # define SHELL_H
 
 #include "../Libft/includes/libft.h"
+#include "moves.h"
+
 #include <termios.h>
 #include <term.h>
 #include <termcap.h>
 #include <sys/ioctl.h>
+
+
 
 # define EOC "\e[0m"
 # define RED "\e[38;5;197m"
@@ -59,9 +63,11 @@ typedef struct s_shell
 {
 	int line;
 	int cursor;
+	int rows;
 	char key[8];
 	t_env *environ;
-	t_history *list;
+	t_history *history_tail;
+	t_history *history_current;
 	int prompt_len;
 	int command_len;
 	char buffer[4096];
@@ -73,6 +79,7 @@ typedef struct s_shell
 
 
 t_shell g_data;
+
 //global list variable for environment variables
 
 t_env		*copy_env(char **env);
@@ -85,6 +92,7 @@ void		signals(void);
 void        print_prompt(void);
 void        set_old_mode(void);
 int         set_shell_mode(void);
+void        get_rows(void);
 void	    get_screen_size(void);
 void        cursor_actions(void);
 void        delete_char(void);
@@ -93,13 +101,10 @@ int			print_command(int sign);
 void        capability(char *name);
 void        capability_n(char *name, int n);
 
-void    move_cursor_home(void);
-void    move_cursor_end(void);
-void    move_cursor_to_the_next_word(void);
-void    move_cursor_to_the_prev_word(void);
-void    move_cursor_right(void);
-void    move_cursor_left(void);
-void    move_cursor_up(void);
-void    move_cursor_down(void);
+//history
+void history_actions(void);
+void history_save(void);
+void history_up(void);
+
 
 #endif

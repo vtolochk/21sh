@@ -14,7 +14,7 @@
 
 void shell_init(char **env)
 {
-	g_data.list = NULL;
+	g_data.history_tail = NULL;
 	g_data.environ = copy_env(env);
 	if (set_shell_mode() == FAIL)
 		shell_exit();
@@ -24,7 +24,8 @@ void shell_init(char **env)
 
 void shell_exit(void)
 {
-	// FREE
+	// FREE history
+	// free env list
 	set_old_mode();
 	exit(OK);
 }

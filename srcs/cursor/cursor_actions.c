@@ -15,11 +15,7 @@
 void cursor_actions(void)
 {
 	capability("im");
-	if (ft_strequ(&g_data.key[1], ARROW_UP))
-		return ; // history up
-	else if (ft_strequ(&g_data.key[1], ARROW_DOWN))
-		return ; // history down
-	else if (ft_strequ(&g_data.key[1], CTRL_UP))
+	if (ft_strequ(&g_data.key[1], CTRL_UP))
 		move_cursor_up();
 	else if (ft_strequ(&g_data.key[1], CTRL_DOWN))
 		move_cursor_down();

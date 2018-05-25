@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   getters.c                                          :+:      :+:    :+:   */
+/*   moves.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vtolochk <vtolochk@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/05/14 10:30:00 by vtolochk          #+#    #+#             */
-/*   Updated: 2018/05/14 10:30:00 by vtolochk         ###   ########.fr       */
+/*   Created: 2018/05/25 09:09:00 by vtolochk          #+#    #+#             */
+/*   Updated: 2018/05/25 09:09:00 by vtolochk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shell.h"
+#ifndef MOVES_H
+# define MOVES_H
 
-void	get_screen_size(void)
-{
-	ioctl(STDERR_FILENO, TIOCGWINSZ, &g_data.win_size);
-}
+void    move_cursor_up(void);
+void    move_cursor_end(void);
+void    move_cursor_down(void);
+void    move_cursor_home(void);
+void    move_cursor_left(void);
+void    move_cursor_right(void);
+void    move_cursor_to_the_next_word(void);
+void    move_cursor_to_the_prev_word(void);
 
-void get_rows(void)
-{
-	g_data.rows = g_data.command_len / g_data.win_size.ws_col;
-	g_data.rows++;
-}
+#endif
