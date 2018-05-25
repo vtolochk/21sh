@@ -61,6 +61,7 @@ typedef struct s_history
 
 typedef struct s_shell
 {
+	int ws_col;
 	int line;
 	int cursor;
 	int rows;
@@ -74,7 +75,6 @@ typedef struct s_shell
 	char command[4096];
 	struct termios tty;
 	struct termios old_tty;
-	struct winsize win_size;
 }               t_shell;
 
 

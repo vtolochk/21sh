@@ -16,7 +16,6 @@ void annulment(void)
 {
 	g_data.line = 1;
 	g_data.command_len = 0;
-	g_data.history_current = NULL;
 	g_data.cursor = g_data.prompt_len;
 	ft_bzero(g_data.command, 4096);
 	ft_bzero(&g_data.key[0], 8);
@@ -32,10 +31,9 @@ void shell_loop(void)
 {
 	while (1)
 	{
-		signals();
 		get_screen_size();
 		get_rows();
-		//ft_printf("read");
+		signals();
 		read(STDIN_FILENO, &g_data.key, sizeof(g_data.key));
 		if (g_data.key[0] == ENTER)
 		{
@@ -50,8 +48,8 @@ void shell_loop(void)
 		{
 			//autocomplete
 		}
-		history_actions();
 		cursor_actions();
+		history_actions();
 		ft_bzero(&g_data.key[0], sizeof(g_data.key));
 	}
 }

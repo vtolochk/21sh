@@ -14,11 +14,12 @@
 
 void	get_screen_size(void)
 {
-	ioctl(STDERR_FILENO, TIOCGWINSZ, &g_data.win_size);
+	g_data.ws_col = tgetnum("co");
 }
 
 void get_rows(void)
 {
-	g_data.rows = g_data.command_len / g_data.win_size.ws_col;
+	if (g_data.command_len && g_data.ws_col)
+		g_data.rows = g_data.command_len / g_data.ws_col;
 	g_data.rows++;
 }
