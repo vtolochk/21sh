@@ -67,8 +67,7 @@ typedef struct s_shell
 	int rows;
 	char key[8];
 	t_env *environ;
-	t_history *history_tail;
-	t_history *history_current;
+	t_history *history_list;
 	int prompt_len;
 	int command_len;
 	char buffer[4096];
@@ -105,6 +104,9 @@ void        capability_n(char *name, int n);
 void history_actions(void);
 void history_save(void);
 void history_up(void);
+t_history *history_new_node(char *command);
+void debug_list(void);
+void history_go_to_the_first_element(void);
 
 
 #endif

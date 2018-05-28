@@ -27,6 +27,14 @@ void execute_command(void)
 		shell_exit();
 }
 
+void autocomplete(void)
+{
+	if (g_data.key[0] == TAB)
+	{
+		//autocomplete
+	}
+}
+
 void shell_loop(void)
 {
 	while (1)
@@ -44,10 +52,7 @@ void shell_loop(void)
 			print_prompt();
 			continue ;
 		}
-		else if (g_data.key[0] == TAB)
-		{
-			//autocomplete
-		}
+		autocomplete();
 		cursor_actions();
 		history_actions();
 		ft_bzero(&g_data.key[0], sizeof(g_data.key));

@@ -14,12 +14,12 @@
 
 void shell_init(char **env)
 {
-	g_data.history_tail = NULL;
-	g_data.environ = copy_env(env);
 	if (set_shell_mode() == FAIL)
 		shell_exit();
 	print_prompt();
 	annulment();
+	g_data.environ = copy_env(env);
+	g_data.history_list = NULL;
 }
 
 void shell_exit(void)

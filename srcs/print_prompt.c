@@ -19,7 +19,7 @@ void print_prompt(void)
 	//
 
 	ft_putstr_fd(RED, 1);
-	ft_putstr_fd("shell > ", 1);
+	ft_putstr_fd("shell > ", 1); // change to the second flow
 	ft_putstr_fd(EOC, 1);
 	g_data.prompt_len = 8;
 //TODO: strlen prompt_str
