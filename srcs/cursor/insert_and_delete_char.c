@@ -35,15 +35,18 @@ void delete_char(void)
 	}
 }
 
-void insert_char(void)
+void insert_char(char c)
 {
 	char *tail;
 	char *head;
 	char *new_tail;
+	char new_char[8];
 
+	ft_bzero(new_char, sizeof(new_char));
+	new_char[0] = c;
 	tail = ft_strsub(g_data.command, g_data.cursor - g_data.prompt_len, g_data.command_len);
 	head = ft_strsub(g_data.command, 0, g_data.cursor - g_data.prompt_len);
-	new_tail = ft_strjoin(&g_data.key[0], tail);
+	new_tail = ft_strjoin(&new_char[0], tail);
 	ft_bzero(g_data.command, 4096);
 	ft_strcat(g_data.command, head);
 	ft_strcat(g_data.command, new_tail);

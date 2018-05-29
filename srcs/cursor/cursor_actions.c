@@ -34,7 +34,7 @@ void cursor_actions(void)
 	else if (g_data.key[0] == BACKSPACE)
 		delete_char();
 	else if (ft_isprint(g_data.key[0]))
-		insert_char();
+		insert_char(g_data.key[0]);
 	capability("ei");
 }
 

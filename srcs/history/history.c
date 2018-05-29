@@ -12,42 +12,6 @@
 
 #include "shell.h"
 
-t_history *history_new_node(char *command)
-{
-	t_history *new_node;
-
-	new_node = (t_history *)malloc(sizeof(t_history));
-	new_node->command = ft_strdup(command);
-	new_node->next = NULL;
-	new_node->prev = NULL;
-	return (new_node);
-}
-
-void save_last_command(char **last_command)
-{
-	if (!(*last_command))
-		*last_command = ft_strdup(g_data.command);
-	else
-	{
-		ft_strdel(last_command);
-		*last_command = ft_strdup(g_data.command);
-	}
-}
-
-void debug_list(char *last_command)
-{
-	t_history *temp = g_data.history_list;
-	dprintf(2, "\n*** list ***\n");
-	while (temp)
-	{
-		dprintf(2, "|%s|\n", temp->command);
-		temp = temp->next;
-	}
-	dprintf(2, "\ng_data.command: |%s|\n", g_data.command);
-	dprintf(2, "last_command: |%s|\n", last_command);
-	dprintf(2, "\n*** end list ***\n");
-}
-
 void history_save(void)
 {
 	t_history *temp_next;
@@ -65,26 +29,6 @@ void history_save(void)
 		new_node->prev = g_data.history_list;
 		if (temp_next)
 			temp_next->prev = new_node;
-	}
-}
-
-void clean_screen_after_prompt(void)
-{
-	if (g_data.line > 1)
-		capability_n("UP", g_data.line - 1);
-	capability("cr");
-	capability_n("RI", g_data.prompt_len);
-	capability("cd");
-	g_data.cursor = g_data.prompt_len;
-	g_data.line = 1;
-}
-
-void history_go_to_the_first_element(void)
-{
-	if (g_data.history_list)
-	{
-		while (g_data.history_list->prev)
-			g_data.history_list = g_data.history_list->prev;
 	}
 }
 
@@ -134,10 +78,16 @@ void history_up(void)
 	g_data.line = (g_data.command_len / g_data.ws_col) + 1;
 }
 
-void history_actions(void)
+void history_actions(int command)
 {
 	static char *last_command;
 
+	if (command == EXIT)
+	{
+		ft_strdel(&last_command);
+		history_free();
+		return ;
+	}
 	capability("im");
 	if (ft_strequ(&g_data.key[1], ARROW_UP))
 		history_up();
@@ -153,15 +103,6 @@ void history_actions(void)
 			history_save();
 		}
 	}
-	debug_list(last_command);
 	capability("ei");
 }
 
-void history_free(void)
-{
-//	history_go_to_the_first_element();
-//	while (g_data.history_list)
-//	{
-//		ft_strdel()
-//	}
-}

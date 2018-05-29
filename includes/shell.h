@@ -14,13 +14,10 @@
 # define SHELL_H
 
 #include "../Libft/includes/libft.h"
+#include "structs.h"
 #include "moves.h"
-
-#include <termios.h>
-#include <term.h>
-#include <termcap.h>
-#include <sys/ioctl.h>
-
+#include "history.h"
+#include "copy_cut_paste.h"
 
 
 # define EOC "\e[0m"
@@ -45,44 +42,9 @@
 # define FAIL 1
 # define OK 0
 
-# define DOWN 1
-# define UP  0
-# define BUFFER_SIZE 4096
-
-typedef struct s_env
-{
-	char *name;
-	char *value;
-	struct s_env *next;
-}               t_env;
-
-typedef struct s_history
-{
-	char *command;
-	struct s_history *next;
-	struct s_history *prev;
-}               t_history;
-
-typedef struct s_shell
-{
-	int ws_col;
-	int line;
-	int cursor;
-	int rows;
-	char key[8];
-	t_env *environ;
-	t_history *history_list;
-	int prompt_len;
-	int command_len;
-	char buffer[BUFFER_SIZE];
-	char command[BUFFER_SIZE];
-	struct termios tty;
-	struct termios old_tty;
-}               t_shell;
-
+# include <stdio.h>
 
 t_shell g_data;
-#include <stdio.h>
 //global list variable for environment variables
 
 t_env		*copy_env(char **env);
@@ -99,18 +61,10 @@ void        get_rows(void);
 void	    get_screen_size(void);
 void        cursor_actions(void);
 void        delete_char(void);
-void        insert_char(void);
+void        insert_char(char c);
 int			print_command(int sign);
 void        capability(char *name);
 void        capability_n(char *name, int n);
-
-//history
-void history_actions(void);
-void history_save(void);
-t_history *history_new_node(char *command);
-void debug_list(char *last_command);
-void history_go_to_the_first_element(void);
-void history_moves(char *last_command, char direction);
 
 
 #endif
