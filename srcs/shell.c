@@ -19,7 +19,7 @@ void shell_init(char **env)
 	print_prompt();
 	annulment();
 	g_data.environ = copy_env(env);
-	g_data.history_list = NULL;
+	g_data.history_list = history_new_node(NULL);
 }
 
 void shell_exit(void)

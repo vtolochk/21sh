@@ -14,7 +14,7 @@
 
 void move_cursor_right(void)
 {
-	if (g_data.cursor < g_data.command_len + g_data.prompt_len && g_data.ws_col)
+	if (g_data.cursor < g_data.command_len + g_data.prompt_len)
 	{
 		if ((g_data.cursor + 1) % g_data.ws_col == 0)
 		{
@@ -33,7 +33,7 @@ void move_cursor_left(void)
 	int i;
 
 	i = 0;
-	if (g_data.cursor > g_data.prompt_len && g_data.ws_col)
+	if (g_data.cursor > g_data.prompt_len)
 	{
 		if (g_data.cursor % g_data.ws_col == 0)
 		{

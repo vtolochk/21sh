@@ -45,6 +45,10 @@
 # define FAIL 1
 # define OK 0
 
+# define DOWN 1
+# define UP  0
+# define BUFFER_SIZE 4096
+
 typedef struct s_env
 {
 	char *name;
@@ -70,15 +74,15 @@ typedef struct s_shell
 	t_history *history_list;
 	int prompt_len;
 	int command_len;
-	char buffer[4096];
-	char command[4096];
+	char buffer[BUFFER_SIZE];
+	char command[BUFFER_SIZE];
 	struct termios tty;
 	struct termios old_tty;
 }               t_shell;
 
 
 t_shell g_data;
-
+#include <stdio.h>
 //global list variable for environment variables
 
 t_env		*copy_env(char **env);
@@ -103,10 +107,10 @@ void        capability_n(char *name, int n);
 //history
 void history_actions(void);
 void history_save(void);
-void history_up(void);
 t_history *history_new_node(char *command);
-void debug_list(void);
+void debug_list(char *last_command);
 void history_go_to_the_first_element(void);
+void history_moves(char *last_command, char direction);
 
 
 #endif
