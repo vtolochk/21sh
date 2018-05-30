@@ -62,5 +62,8 @@ int			print_command(int sign);
 void        capability(char *name);
 void        capability_n(char *name, int n);
 
+void parse_command(void);
+void execute_command(void);
+
 
 #endif

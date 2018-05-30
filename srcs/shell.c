@@ -24,7 +24,6 @@ void shell_init(char **env)
 
 void shell_exit(void)
 {
-	// FREE history
 	// free env list
 	history_actions(EXIT);
 	set_old_mode();

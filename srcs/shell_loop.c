@@ -21,20 +21,6 @@ void annulment(void)
 	ft_bzero(&g_data.key[0], 8);
 }
 
-void execute_command(void)
-{
-	if (ft_strequ(g_data.command, "exit") == 1)
-		shell_exit();
-}
-
-void autocomplete(void)
-{
-	if (g_data.key[0] == TAB)
-	{
-		//autocomplete
-	}
-}
-
 void shell_loop(void)
 {
 	while (1)
@@ -46,13 +32,12 @@ void shell_loop(void)
 		if (g_data.key[0] == ENTER)
 		{
 			history_actions(WORK);
-			//parse_command();
+			parse_command();
 			execute_command();
 			annulment();
 			print_prompt();
 			continue ;
 		}
-		autocomplete();
 		cursor_actions();
 		history_actions(WORK);
 		copy_paste_actions();
