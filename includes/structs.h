@@ -51,4 +51,7 @@ typedef struct s_shell
 	struct termios old_tty;
 }               t_shell;
 
+t_shell g_data;
+//global list variable for environment variables
+
 #endif

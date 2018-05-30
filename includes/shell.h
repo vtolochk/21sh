@@ -19,7 +19,6 @@
 #include "history.h"
 #include "copy_cut_paste.h"
 
-
 # define EOC "\e[0m"
 # define RED "\e[38;5;197m"
 # define BLUE "\e[38;5;69m"
@@ -43,9 +42,6 @@
 # define OK 0
 
 # include <stdio.h>
-
-t_shell g_data;
-//global list variable for environment variables
 
 t_env		*copy_env(char **env);
 void        print_env(void);
