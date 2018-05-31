@@ -19,10 +19,7 @@ static void		sig_processing(int sig_num)
 		shell_exit();
 	else if (sig_num == SIGWINCH)
 	{
-		/**	TODO 42sh:
-		 **
-		 ** 	resizing window
-		 **/
+
 	}
 }
 

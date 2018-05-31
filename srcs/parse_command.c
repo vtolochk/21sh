@@ -12,7 +12,12 @@
 
 #include "shell.h"
 
+void quoting(void)
+{
+
+}
+
 void parse_command(void)
 {
-	
+	quoting();
 }

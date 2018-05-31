@@ -35,6 +35,8 @@ void cursor_actions(void)
 		delete_char();
 	else if (ft_isprint(g_data.key[0]))
 		insert_char(g_data.key[0]);
+	else if (g_data.key[0] == ESC && !g_data.key[1])
+		clear_line();
 	capability("ei");
 }
 

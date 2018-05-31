@@ -18,6 +18,6 @@ void execute_command(void)
 		shell_exit();
 	else
 	{
-		ft_putstr_fd("I have not known it yet.\n", 1);
+		ft_putstr_fd("\nI have not known it yet.", 1);
 	}
 }
