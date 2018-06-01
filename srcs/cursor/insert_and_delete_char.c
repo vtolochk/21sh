@@ -25,7 +25,7 @@ void delete_char(void)
 		ft_strcat(g_data.command, head);
 		ft_strcat(g_data.command, tail);
 		g_data.command_len--;
-		move_cursor_left();
+		move_cursor_left(&g_data.cursor);
 		capability("cd");
 		ft_putstr_fd(tail, 1);
 		if (ft_strlen(tail) > 0)
@@ -54,7 +54,7 @@ void insert_char(char c)
 	capability("cd");
 	ft_putstr_fd(new_tail, 1);
 	capability_n("LE", ft_strlen(new_tail));
-	move_cursor_right();
+	move_cursor_right(&g_data.cursor);
 	ft_strdel(&tail);
 	ft_strdel(&head);
 	ft_strdel(&new_tail);

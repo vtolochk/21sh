@@ -16,6 +16,7 @@ void annulment(void)
 {
 	g_data.line = 1;
 	g_data.command_len = 0;
+	g_data.prompt_len = 8; // temporary; need to change each time
 	g_data.cursor = g_data.prompt_len;
 	ft_bzero(g_data.command, sizeof(g_data.command));
 	ft_bzero(&g_data.key[0], 8);
@@ -33,6 +34,9 @@ void shell_loop(void)
 		{
 			history_actions(WORK);
 			parse_command();
+
+			ft_printf("\ncommand: |%s|\n", g_data.command);
+
 			execute_command();
 			annulment();
 			print_prompt();

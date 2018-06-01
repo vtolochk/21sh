@@ -39,7 +39,7 @@ static void cut_after_cursor(void)
 		ft_strcpy(g_data.buffer, string);
 		save_curs = g_data.cursor;
 		while (g_data.cursor < g_data.command_len + g_data.prompt_len)
-			move_cursor_right();
+			move_cursor_right(&g_data.cursor);
 		while (g_data.cursor > save_curs)
 			delete_char();
 		ft_strdel(&string);
@@ -53,7 +53,7 @@ static void cut_all(void)
 		ft_bzero(g_data.buffer, sizeof(g_data.buffer));
 		ft_strcpy(g_data.buffer, g_data.command);
 		while (g_data.cursor < g_data.command_len + g_data.prompt_len)
-			move_cursor_right();
+			move_cursor_right(&g_data.cursor);
 		while (g_data.cursor > g_data.prompt_len)
 			delete_char();
 	}

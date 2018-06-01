@@ -17,8 +17,8 @@ void    move_cursor_up(void);
 void    move_cursor_end(void);
 void    move_cursor_down(void);
 void    move_cursor_home(void);
-void    move_cursor_left(void);
-void    move_cursor_right(void);
+void    move_cursor_left(int *cursor);
+void    move_cursor_right(int *cursor);
 void    move_cursor_to_the_next_word(void);
 void    move_cursor_to_the_prev_word(void);
 

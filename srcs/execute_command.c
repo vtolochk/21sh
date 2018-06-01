@@ -16,8 +16,4 @@ void execute_command(void)
 {
 	if (ft_strequ(g_data.command, "exit") == 1)
 		shell_exit();
-	else
-	{
-		ft_putstr_fd("\nI have not known it yet.", 1);
-	}
 }

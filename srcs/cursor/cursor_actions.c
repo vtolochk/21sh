@@ -24,9 +24,9 @@ void cursor_actions(void)
 	else if(ft_strequ(&g_data.key[1], CTRL_RIGHT))
 		move_cursor_to_the_next_word();
 	else if (ft_strequ(&g_data.key[1], ARROW_LEFT))
-		move_cursor_left();
+		move_cursor_left(&g_data.cursor);
 	else if(ft_strequ(&g_data.key[1], ARROW_RIGHT))
-		move_cursor_right();
+		move_cursor_right(&g_data.cursor);
 	else if(ft_strequ(&g_data.key[1], END))
 		move_cursor_end();
 	else if(ft_strequ(&g_data.key[1], HOME))
