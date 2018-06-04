@@ -35,7 +35,7 @@ void shell_loop(void)
 			history_actions(WORK);
 			parse_command();
 
-			ft_printf("\ncommand: |%s|\n", g_data.command);
+			//ft_printf("\ncommand: |%s|\n", g_data.command);
 
 			execute_command();
 			annulment();

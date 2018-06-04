@@ -12,11 +12,11 @@
 
 #include "shell.h"
 
-void move_cursor_right(int *cursor)
+void move_cursor_right(void)
 {
-	if ((*cursor) < g_data.command_len + g_data.prompt_len)
+	if (g_data.cursor < g_data.command_len + g_data.prompt_len)
 	{
-		if (((*cursor) + 1) % g_data.ws_col == 0)
+		if ((g_data.cursor + 1) % g_data.ws_col == 0)
 		{
 			capability("do");
 			capability("cr");
@@ -24,18 +24,18 @@ void move_cursor_right(int *cursor)
 		}
 		else
 			capability("nd");
-		(*cursor)++;
+		g_data.cursor++;
 	}
 }
 
-void move_cursor_left(int *cursor)
+void move_cursor_left(void)
 {
 	int i;
 
 	i = 0;
-	if ((*cursor) > g_data.prompt_len)
+	if (g_data.cursor > g_data.prompt_len)
 	{
-		if ((*cursor) % g_data.ws_col == 0)
+		if (g_data.cursor % g_data.ws_col == 0)
 		{
 			capability("up");
 			while (i++ < g_data.ws_col)
@@ -44,7 +44,7 @@ void move_cursor_left(int *cursor)
 		}
 		else
 			capability("le");
-		(*cursor)--;
+		g_data.cursor--;
 	}
 }
 
@@ -56,7 +56,7 @@ void move_cursor_up(void)
 	if (g_data.line > 1)
 	{
 		while (i++ < g_data.ws_col)
-			move_cursor_left(&g_data.cursor);
+			move_cursor_left();
 	}
 }
 
@@ -70,6 +70,6 @@ void move_cursor_down(void)
 	if (!last_line)
 	{
 		while (i++ < g_data.ws_col)
-			move_cursor_right(&g_data.cursor);
+			move_cursor_right();
 	}
 }

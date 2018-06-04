@@ -15,13 +15,13 @@
 void move_cursor_home(void)
 {
 	while (g_data.cursor > g_data.prompt_len)
-		move_cursor_left(&g_data.cursor);
+		move_cursor_left();
 }
 
 void move_cursor_end(void)
 {
 	while (g_data.cursor < g_data.command_len + g_data.prompt_len)
-		move_cursor_right(&g_data.cursor);
+		move_cursor_right();
 }
 
 void move_cursor_to_the_next_word(void)
@@ -31,12 +31,12 @@ void move_cursor_to_the_next_word(void)
 	index = g_data.cursor - g_data.prompt_len;
 	while (ft_isprint(g_data.command[index]) && !ft_is_whitespace(g_data.command[index]))
 	{
-		move_cursor_right(&g_data.cursor);
+		move_cursor_right();
 		index++;
 	}
 	while (ft_is_whitespace(g_data.command[index]))
 	{
-		move_cursor_right(&g_data.cursor);
+		move_cursor_right();
 		index++;
 	}
 }
@@ -48,17 +48,17 @@ void move_cursor_to_the_prev_word(void)
 	index = g_data.cursor - g_data.prompt_len - 1;
 	while (ft_isprint(g_data.command[index]) && !ft_is_whitespace(g_data.command[index - 1]))
 	{
-		move_cursor_left(&g_data.cursor);
+		move_cursor_left();
 		index--;
 	}
 	while (ft_is_whitespace(g_data.command[index]))
 	{
-		move_cursor_left(&g_data.cursor);
+		move_cursor_left();
 		index--;
 	}
 	while (ft_isprint(g_data.command[index]) && !ft_is_whitespace(g_data.command[index]))
 	{
-		move_cursor_left(&g_data.cursor);
+		move_cursor_left();
 		index--;
 	}
 }
