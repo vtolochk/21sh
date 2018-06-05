@@ -24,6 +24,11 @@ void annulment(void)
 
 void shell_loop(void)
 {
+	int i;
+	char **for_free;
+	char **commands;
+
+	i = 0;
 	while (1)
 	{
 		get_screen_size();
@@ -33,11 +38,15 @@ void shell_loop(void)
 		if (g_data.key[0] == ENTER)
 		{
 			history_actions(WORK);
-			parse_command();
-
-			//ft_printf("\ncommand: |%s|\n", g_data.command);
-
-			execute_command();
+			quoting();
+			commands = parse_command();
+			for_free = commands;
+			while (commands[i])
+			{
+				ft_printf("\ncommand: |%s|\n", commands[i]);
+				execute_command(commands[i++]);
+			}
+			ft_free_tab((void **)for_free);
 			annulment();
 			print_prompt();
 			continue ;

@@ -65,9 +65,10 @@ void        clear_line(void);
 
 char check_unclosing(void);
 void wait_quote(char quote);
+void quoting(void);
 
-void parse_command(void);
-void execute_command(void);
+char **parse_command(void);
+void execute_command(char *cmd);
 
 
 #endif

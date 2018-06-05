@@ -12,8 +12,8 @@
 
 #include "shell.h"
 
-void execute_command(void)
+void execute_command(char *cmd)
 {
-	if (ft_strequ(g_data.command, "exit") == 1)
+	if (ft_strequ(cmd, "exit") == 1)
 		shell_exit();
 }
