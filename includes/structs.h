@@ -17,10 +17,9 @@
 #include <term.h>
 #include <termcap.h>
 #include <sys/ioctl.h>
+#include <fcntl.h>
 
 # define BUFFER_SIZE 4096
-# define MAX_COMMANDS 1024
-
 
 /*
 **  Just a random numbers
@@ -29,23 +28,7 @@
 # define PIPE 42
 # define RIGHT_ARR 43
 # define LEFT_ARR 44
-# define DOUBLE_RIGHT_ARR 45
-# define DOUBLE_LEFT_ARR 46
 
-
-/*
-**  if i dont have token
-**  the command will save to the cmd_before
-**
-**
-*/
-
-typedef struct s_info
-{
-	char *cmd_before;
-	int  token[24]; // stack ???
-	char *cmd_after;
-}               t_info;
 
 typedef struct s_env
 {
@@ -79,7 +62,6 @@ typedef struct s_shell
 }               t_shell;
 
 t_shell g_data;
-t_info g_cmd_info[MAX_COMMANDS];
 //global list variable for environment variables
 
 #endif

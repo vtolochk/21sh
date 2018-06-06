@@ -22,15 +22,30 @@ void annulment(void)
 	ft_bzero(&g_data.key[0], 8);
 }
 
+void quoting(void)
+{
+	char quote;
+
+	while (1)
+	{
+		quote = check_unclosing();
+		if (quote)
+			wait_quote(quote);
+		else
+			break ;
+	}
+	g_data.command_len = ft_strlen(g_data.command);
+}
+
 void shell_loop(void)
 {
 	int i;
 	char **for_free;
 	char **commands;
 
-	i = 0;
 	while (1)
 	{
+		i = 0;
 		get_screen_size();
 		get_rows();
 		signals();
@@ -39,13 +54,10 @@ void shell_loop(void)
 		{
 			history_actions(WORK);
 			quoting();
-			commands = parse_command();
+			commands = ft_strsplit(g_data.command, ';');
 			for_free = commands;
 			while (commands[i])
-			{
-				ft_printf("\ncommand: |%s|\n", commands[i]);
 				execute_command(commands[i++]);
-			}
 			ft_free_tab((void **)for_free);
 			annulment();
 			print_prompt();
