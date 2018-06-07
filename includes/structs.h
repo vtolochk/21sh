@@ -18,6 +18,7 @@
 #include <termcap.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
+#include <signal.h>
 
 # define BUFFER_SIZE 4096
 

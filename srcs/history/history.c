@@ -78,7 +78,7 @@ void history_up(void)
 	g_data.line = (g_data.command_len / g_data.ws_col) + 1;
 }
 
-void history_actions(int command)
+void history_actions(int command) // if history same that the previous do not write it
 {
 	static char *last_command;
 

@@ -71,4 +71,6 @@ char **parse_command(void);
 void execute_command(char *cmd);
 
 
+void var_dump(char **arr);
+
 #endif

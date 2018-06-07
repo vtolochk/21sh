@@ -15,7 +15,7 @@
 void print_prompt(void)
 {
 	//temporary
-	write(1, "\n", 1);
+	//write(1, "\n", 1);
 	//
 
 	ft_putstr_fd(RED, 1);

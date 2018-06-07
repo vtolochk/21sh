@@ -12,134 +12,95 @@
 
 #include "shell.h"
 
-void redirection(char **splited, int index)
+void var_dump(char **arr)
 {
-	ft_printf("\nREDIRECT");
-	(void)splited;
-	(void)index;
+	for (int i = 0; arr[i]; ++i)
+		ft_printf("\narr[%i] = \"%s\"", i, arr[i]);
+}
+void var_dump_arr(char ***arr)
+{
+	for (int i = 0; arr[i]; i++)
+	{
+		ft_printf("\nARRAY[%i]:", i);
+		var_dump(arr[i]);
+		ft_printf("\n");
+	}
 }
 
-char *form_string_before(char **splited, int index)
+void    loop_pipe(char ***cmd)
 {
-	int i;
-	char *before;
-	char *temp;
+	int     i;
+	int     p[2];
+	int     fd_in;
 
 	i = 0;
-	before = ft_strnew(0);
-	while (i < index)
+	fd_in = 0;
+	//var_dump_arr(cmd);
+	while (cmd[i])
 	{
-		temp = before;
-		before = ft_strjoin(before, splited[i]);
-		ft_strdel(&temp);
-		temp = before;
-		before = ft_strjoin(before, " ");
-		ft_strdel(&temp);
+		pipe(p);
+		if (fork() == 0)
+		{
+			dup2(fd_in, 0);
+			if (cmd[i + 1] != NULL)
+				dup2(p[1], 1);
+			close(p[0]);
+			execvp(cmd[i][0], cmd[i]);
+			exit(0);
+		}
+		else
+		{
+			if (!(cmd[i + 1]))
+				wait(0);
+			close(p[1]);
+			fd_in = p[0];
+			i++;
+		}
+	}
+}
+
+char ***form_commands(char **splited)
+{
+	int i;
+	int arr_len;
+	char ***commands;
+
+	i = 0;
+	arr_len = array_len(splited);
+	commands = (char ***)malloc(sizeof(char **) * (arr_len + 1));
+	commands[arr_len] = NULL;
+	while (i < arr_len)
+	{
+		commands[i] = ft_split_whitespaces(splited[i]);
 		i++;
 	}
-	return (before);
+	return (commands);
 }
 
-char *form_string_after(char **splited, int index)
+void ft_pipe(char **splited)
 {
-	char *temp;
-	char *after;
+	char ***temp;
+	char ***commands;
 
-	after = ft_strnew(0);
-	while (splited[index] && !(ft_strchr(splited[index], '<') && !(ft_strchr(splited[index], '>') &&
-	                                                               !(ft_strchr(splited[index], '|')))))
+	commands = form_commands(splited);
+	temp = commands;
+	loop_pipe(commands);
+	commands = temp;
+	while (*commands)
 	{
-		temp = after;
-		after = ft_strjoin(after, splited[index]);
-		ft_strdel(&temp);
-		temp = after;
-		after = ft_strjoin(after, " ");
-		ft_strdel(&temp);
-		index++;
+		ft_free_tab((void **)*commands);
+		commands++;
 	}
-	return (after);
-}
-
-
-void	new_process(char *process)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		execve(process, 0, 0);
-		exit(0);
-	}
-	wait(&pid);
-}
-
-void ft_pipe(char **splited, int index)
-{
-	char *before;
-	char *after;
-
-	before = form_string_before(splited, index);
-	index++;
-	after = form_string_after(splited, index);
-
-	int pipefd[2];
-	int pid1, pid2;
-	char **argv1;
-	char **argv2;
-
-	argv1 = ft_split_whitespaces(before);
-	argv2 = ft_split_whitespaces(after);
-
-	pipe(pipefd);
-	pid1 = fork();
-	if (pid1 == 0)
-	{
-		// Hook stdout up to the write end of the pipe and close the read end of
-		// the pipe which is no longer needed by this process.
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[0]);
-		execvp(argv1[0], argv1);
-		exit(0);
-	}
-	pid2 = fork();
-	if (pid2 == 0)
-	{
-		// Hook stdin up to the read end of the pipe and close the write end of
-		// the pipe which is no longer needed by this process.
-		dup2(pipefd[0], STDIN_FILENO);
-		close(pipefd[1]);
-		execvp(argv2[0], argv2);
-		perror("exec");
-		exit(0);
-	}
-	close(pipefd[0]);
-	close(pipefd[1]);
-	// Wait for everything to finish and exit.
-//	waitpid(pid1);
-//	waitpid(pid2);
-
-	ft_strdel(&before);
-	ft_strdel(&after);
+	free(temp);
 }
 
 void execute_command(char *cmd)
 {
-	int i;
 	char **splited;
 
-	i = 0;
-	splited = ft_split_whitespaces(cmd);
-	while (splited[i])
-	{
-		if (ft_strchr(splited[i], '>') || ft_strchr(splited[i], '<'))
-				redirection(splited, i);
-		else if (ft_strchr(splited[i], '|'))
-				ft_pipe(splited, i);
-		i++;
-	}
+	splited = ft_strsplit(cmd, '|');
+	ft_pipe(splited);
 	ft_free_tab((void **)splited);
-	//commands
 	if (ft_strequ(cmd, "exit") == 1)
 		shell_exit();
 }

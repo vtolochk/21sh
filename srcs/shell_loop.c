@@ -49,9 +49,10 @@ void shell_loop(void)
 		get_screen_size();
 		get_rows();
 		signals();
-		read(STDIN_FILENO, &g_data.key, sizeof(g_data.key));
+		read(STDIN_FILENO, &g_data.key, sizeof(g_data.key)); // while read
 		if (g_data.key[0] == ENTER)
 		{
+			write(1, "\n", 1);
 			history_actions(WORK);
 			quoting();
 			commands = ft_strsplit(g_data.command, ';');
