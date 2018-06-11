@@ -27,36 +27,42 @@ void var_dump_arr(char ***arr)
 	}
 }
 
+//printf("\nI am a child i = %d\n", i);
+//printf("\nI am the parent i = %d\n", i);
+//wait(NULL);
+
+
 void    loop_pipe(char ***cmd)
 {
-	int     i;
-	int     p[2];
-	int     fd_in;
+	int   fds[2];
+	pid_t pid;
+	int   fd_in = 0;
+	int i;
 
 	i = 0;
-	fd_in = 0;
-	//var_dump_arr(cmd);
-	while (cmd[i])
+	pid = 0;
+	while (cmd[i] != NULL)
 	{
-		pipe(p);
-		if (fork() == 0)
+		pipe(fds);
+		pid = fork();
+		if (pid == 0)
 		{
-			dup2(fd_in, 0);
+			dup2(fd_in, 0); //change the input according to the old one
 			if (cmd[i + 1] != NULL)
-				dup2(p[1], 1);
-			close(p[0]);
+				dup2(fds[1], 1);
+			close(fds[0]);
 			execvp(cmd[i][0], cmd[i]);
 			exit(0);
 		}
 		else
 		{
-			if (!(cmd[i + 1]))
-				wait(0);
-			close(p[1]);
-			fd_in = p[0];
+			close(fds[1]);
+			fd_in = fds[0]; //save the input for the next command
 			i++;
 		}
 	}
+	waitpid(pid, 0, 0);
+	kill(0, 0);
 }
 
 char ***form_commands(char **splited)
