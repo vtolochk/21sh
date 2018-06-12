@@ -6,7 +6,7 @@
 #    By: vtolochk <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/05/08 16:22:13 by vtolochk          #+#    #+#              #
-#    Updated: 2018/05/08 16:44:45 by vtolochk         ###   ########.fr        #
+#    Updated: 2018/06/12 13:51:13 by vtolochk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ srcs/cursor/insert_and_delete_char.c  srcs/cursor/cursor_actions.c \
 srcs/cursor/moves_1.c srcs/cursor/moves_2.c srcs/history/history.c \
 srcs/history/history_helpers.c srcs/cursor/copy_paste_actions.c \
 srcs/cursor/cut_command.c srcs/execute_command.c \
-srcs/quoting.c
+srcs/quoting.c srcs/builtins/check_builtins.c srcs/builtins/bi_echo.c \
+srcs/builtins/bi_exit.c
 
 OBJ = $(SRCS:.c=.o)
 

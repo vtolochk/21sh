@@ -19,8 +19,12 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <sys/stat.h>
 
 # define BUFFER_SIZE 4096
+
+# define  ONE_ARROW O_CREAT | O_WRONLY | O_TRUNC
+# define  TWO_ARROWS O_CREAT | O_WRONLY | O_APPEND
 
 /*
 **  Just a random numbers
@@ -63,6 +67,5 @@ typedef struct s_shell
 }               t_shell;
 
 t_shell g_data;
-//global list variable for environment variables
 
 #endif

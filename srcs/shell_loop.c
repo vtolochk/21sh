@@ -45,13 +45,13 @@ void shell_loop(void)
 
 	while (1)
 	{
-		i = 0;
 		get_screen_size();
 		get_rows();
 		signals();
 		read(STDIN_FILENO, &g_data.key, sizeof(g_data.key)); // while read
 		if (g_data.key[0] == ENTER)
 		{
+			i = 0;
 			write(1, "\n", 1);
 			history_actions(WORK);
 			quoting();

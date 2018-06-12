@@ -18,6 +18,7 @@
 #include "moves.h"
 #include "history.h"
 #include "copy_cut_paste.h"
+#include "builtins.h"
 
 # define EOC "\e[0m"
 # define RED "\e[38;5;197m"
@@ -67,8 +68,9 @@ char check_unclosing(void);
 void wait_quote(char quote);
 void quoting(void);
 
-char **parse_command(void);
 void execute_command(char *cmd);
+char		**list_to_array(void);
+int			list_len(t_env *lst);
 
 
 void var_dump(char **arr);

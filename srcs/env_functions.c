@@ -76,3 +76,38 @@ t_env		*copy_env(char **env)
 	}
 	return (head);
 }
+
+int			list_len(t_env *lst)
+{
+	int len;
+
+	len = 0;
+	while (lst)
+	{
+		len++;
+		lst = lst->next;
+	}
+	return (len);
+}
+
+char		**list_to_array(void)
+{
+	int			i;
+	char        *temp;
+	char		**envp;
+	t_env	    *list;
+
+	i = 0;
+	temp = NULL;
+	list = g_data.environ;
+	envp = (char **)malloc(sizeof(char *) * ((list_len(list) + 1)));
+	while (list)
+	{
+		temp = ft_strjoin(list->name, "=");
+		envp[i++] = ft_strjoin(temp, list->value);
+		ft_strdel(&temp);
+		list = list->next;
+	}
+	envp[i] = NULL;
+	return (envp);
+}
