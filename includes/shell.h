@@ -72,7 +72,9 @@ void execute_command(char *cmd);
 char		**list_to_array(void);
 int			list_len(t_env *lst);
 
+char ***form_commands(char **splited);
 
 void var_dump(char **arr);
+void var_dump_arr(char ***arr);
 
 #endif

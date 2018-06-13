@@ -16,7 +16,6 @@ int bi_echo(char **argv)
 {
 	int i;
 	int j;
-	int last_char;
 	int new_line;
 
 	i = 1;
@@ -29,17 +28,14 @@ int bi_echo(char **argv)
 	while (argv[i])
 	{
 		j = 0;
-		last_char = ft_strlen(argv[i]);
 		while (argv[i][j])
 		{
-			if (j == 0 && (argv[i][j] == '\'' || argv[i][j] == '\"'))
-				j++;
-			if (j == last_char && (argv[i][j] == '\'' || argv[i][j] == '\"'))
-				break ;
 			write(STDOUT_FILENO, &argv[i][j], 1);
 			j++;
 		}
 		i++;
+		if (argv[i])
+			write(STDOUT_FILENO, " ", 1); //put spaces not a good idea, it isnt right
 	}
 	if (new_line)
 		write(STDOUT_FILENO, "\n", 1);

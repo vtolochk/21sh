@@ -16,7 +16,9 @@ void var_dump(char **arr)
 {
 	for (int i = 0; arr[i]; ++i)
 		ft_printf("\narr[%i] = \"%s\"", i, arr[i]);
+	write(1, "\n", 1);
 }
+
 void var_dump_arr(char ***arr)
 {
 	for (int i = 0; arr[i]; i++)
@@ -26,30 +28,6 @@ void var_dump_arr(char ***arr)
 		ft_printf("\n");
 	}
 }
-
-//void do_builtins(char *str, int *i)
-//{
-//
-//}
-//
-//void do_binary(char *str, int *i)
-//{
-//
-//}
-//
-//void do_redirect(char **cmd)
-//{
-//	int i;
-//
-//	i = 0;
-//	while (cmd[i])
-//	{
-//		do_builtins(cmd[i], &i);
-//		do_binary(cmd[i], &i);
-//		i++;
-//	}
-//
-//}
 
 void    pipe_loop(char ***cmd)
 {
@@ -94,64 +72,6 @@ void    pipe_loop(char ***cmd)
 	kill(0, 0);
 }
 
-char **form_helper(char *str) // continue here please
-{
-	char *before;
-	char *quote_string;
-	char *after;
-	char *close_quote;
-	char *find;
-	char **new_arr;
-	char **after_quote;
-
-	find = ft_strchr(str, '\'');
-	if (!find)
-		find = ft_strchr(str, '\"');
-
-
-
-	before = ft_strsub(str, 0, find - str);
-
-	close_quote = ft_strchr(++find, );
-	printf("\nclose quote: %s\n", close_quote);
-	quote_string = ft_strsub(str, find - str, close_quote - find);
-	printf("\nquote_string: %s\n", quote_string);
-	after = ft_strsub(str, close_quote - str, ft_strlen(str));
-
-	new_arr = ft_split_whitespaces(before);
-
-	new_arr = array_append_str(new_arr, quote_string);
-
-	after_quote = ft_split_whitespaces(after);
-
-	new_arr = array_append_array(new_arr, after_quote);
-
-	var_dump(new_arr);
-	exit(0);
-	return (new_arr);
-}
-
-char ***form_commands(char **splited)
-{
-	int i;
-	int arr_len;
-	char ***commands;
-
-	i = 0;
-	arr_len = array_len(splited);
-	commands = (char ***)malloc(sizeof(char **) * (arr_len + 1));
-	commands[arr_len] = NULL;
-	while (i < arr_len)
-	{
-		if (ft_strchr(splited[i], '\'') || ft_strchr(splited[i], '\"'))
-			commands[i] = form_helper(splited[i]);
-		else
-			commands[i] = ft_split_whitespaces(splited[i]);
-		i++;
-	}
-	return (commands);
-}
-
 //void redirect_to_the_file(char **cmd, char *filename, int flags, int redirect_fd)
 //{
 //	int file_fd;
@@ -164,18 +84,18 @@ char ***form_commands(char **splited)
 
 void pipes_and_redirections(char **splited)
 {
-	char ***temp;
+	int i;
 	char ***commands;
 
+	i = 0;
 	commands = form_commands(splited);
-	temp = commands;
 	pipe_loop(commands);
-	while (*commands)
+	while (commands[i])
 	{
-		ft_free_tab((void **)*commands);
-		commands++;
+		ft_free_tab((void **)commands[i]);
+		i++;
 	}
-	free(temp);
+	free(commands);
 }
 
 void execute_command(char *cmd)

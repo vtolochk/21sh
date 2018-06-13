@@ -14,7 +14,6 @@
 
 int check_builtins(char **argv)
 {
-	var_dump(argv);
 	if (ft_strequ(argv[0], "echo"))
 		return (bi_echo(argv));
 	else if (ft_strequ(argv[0], "exit"))
