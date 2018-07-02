@@ -17,12 +17,17 @@ void history_save(void)
 	t_history *temp_next;
 	t_history *new_node;
 
+	history_go_to_the_first_element();
+	if (g_data.history_list->next)
+	{
+		if (ft_strequ(g_data.command, g_data.history_list->next->command))
+			return ;
+	}
 	new_node  = g_data.command[0] ? history_new_node(g_data.command) : NULL;
 	if (!new_node)
 		return ;
 	if (g_data.history_list)
 	{
-		history_go_to_the_first_element();
 		temp_next = g_data.history_list->next;
 		g_data.history_list->next = new_node;
 		new_node->next = temp_next;
@@ -78,7 +83,7 @@ void history_up(void)
 	g_data.line = (g_data.command_len / g_data.ws_col) + 1;
 }
 
-void history_actions(int command) // if history same that the previous do not write it
+void history_actions(int command)
 {
 	static char *last_command;
 
