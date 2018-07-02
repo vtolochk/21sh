@@ -110,4 +110,3 @@ void history_actions(int command)
 	}
 	capability("ei");
 }
-

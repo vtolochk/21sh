@@ -68,6 +68,9 @@ char check_unclosing(void);
 void wait_quote(char quote);
 void quoting(void);
 
+char **semi_colon_split(char *str);
+
+void command_process(void);
 void execute_command(char *cmd);
 char		**list_to_array(void);
 int			list_len(t_env *lst);

@@ -37,31 +37,58 @@ void quoting(void)
 	g_data.command_len = ft_strlen(g_data.command);
 }
 
-void shell_loop(void)
+// this function will split function and ignoring ; 
+//if its between quotes
+char **semi_colon_split(char *str) 
+{
+	char **temp;
+	//char **result;
+
+	temp = ft_strsplit(str, ';');
+	if (!temp)
+	{
+		printf("return null from split\n");
+		return (NULL);
+	}
+	while (*temp)
+	{
+		printf("str: %s\n", *temp);
+		temp++;
+	}
+	printf("return null\n");
+	return NULL;
+}
+
+void command_process(void)
 {
 	int i;
 	char **for_free;
 	char **commands;
 
+	i = 0;
+	write(1, "\n", 1);
+	history_actions(WORK);
+	quoting();
+	commands = semi_colon_split(g_data.command);
+	for_free = commands;
+	while (commands[i])
+		execute_command(commands[i++]);
+	ft_free_tab((void **)for_free);
+	annulment();
+	print_prompt();
+}
+
+void shell_loop(void)
+{
 	while (1)
 	{
 		get_screen_size();
 		get_rows();
 		signals();
-		read(STDIN_FILENO, &g_data.key, sizeof(g_data.key)); // while read
+		read(STDIN_FILENO, &g_data.key, sizeof(g_data.key));
 		if (g_data.key[0] == ENTER)
 		{
-			i = 0;
-			write(1, "\n", 1);
-			history_actions(WORK);
-			quoting();
-			commands = ft_strsplit(g_data.command, ';');
-			for_free = commands;
-			while (commands[i])
-				execute_command(commands[i++]);
-			ft_free_tab((void **)for_free);
-			annulment();
-			print_prompt();
+			command_process();
 			continue ;
 		}
 		cursor_actions();
