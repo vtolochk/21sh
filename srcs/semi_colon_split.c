@@ -1,7 +1,6 @@
 #include "shell.h"
 
-// this two function will split function and ignoring ; 
-// if its between quotes
+// this function will split command and ignoring ; if it is between quotes
 
 static void split_helper(char **arr)
 {
