@@ -16,17 +16,31 @@ NAME = 21sh
 
 HEADER = includes/shell.h
 
-SRCS = srcs/shell.c srcs/env_functions.c srcs/signals.c srcs/shell_loop.c \
-srcs/print_prompt.c srcs/mods.c srcs/getters.c srcs/helpers.c \
-srcs/cursor/insert_and_delete_char.c  srcs/cursor/cursor_actions.c \
-srcs/cursor/moves_1.c srcs/cursor/moves_2.c srcs/history/history.c \
-srcs/history/history_helpers.c srcs/cursor/copy_paste_actions.c \
-srcs/cursor/cut_command.c srcs/execute_command.c \
-srcs/quoting.c srcs/builtins/check_builtins.c srcs/builtins/bi_echo.c \
-srcs/builtins/bi_exit.c \
+SRCS = srcs/shell.c \
+srcs/env_functions.c \
+srcs/signals.c \
+srcs/shell_loop.c \
+srcs/print_prompt.c \
+srcs/mods.c \
+srcs/getters.c \
+srcs/helpers.c \
+srcs/cursor/insert_and_delete_char.c \
+srcs/cursor/cursor_actions.c \
+srcs/cursor/moves_1.c \
+srcs/cursor/moves_2.c \
+srcs/history/history.c \
+srcs/history/history_helpers.c \
+srcs/cursor/copy_paste_actions.c \
+srcs/cursor/cut_command.c \
+srcs/execute_command.c \
+srcs/quoting.c \
 srcs/semi_colon_split.c \
 srcs/smart_whitespaces_split.c \
 srcs/smart_pipe_split.c \
+srcs/builtins/check_builtins.c \
+srcs/builtins/bi_echo.c \
+srcs/builtins/bi_exit.c \
+srcs/builtins/bi_clear.c \
 
 
 OBJ = $(SRCS:.c=.o)

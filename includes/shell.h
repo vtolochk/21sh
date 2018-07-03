@@ -74,8 +74,7 @@ int			list_len(t_env *lst);
 char		***form_commands(char **splited);
 char 		**smart_whitespaces_split(char *str);
 char		**smart_pipe_split(char *str);
-
-void free_env_list(t_env *environ);
+void 		free_env_list(t_env *environ);
 
 
 void var_dump(char **arr);

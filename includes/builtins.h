@@ -16,5 +16,6 @@
 int check_builtins(char **argv);
 int bi_echo(char **argv);
 int bi_exit(char **argv);
+int bi_clear(char **argv);
 
 #endif
