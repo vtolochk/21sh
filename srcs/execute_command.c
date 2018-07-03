@@ -82,6 +82,24 @@ void    pipe_loop(char ***cmd)
 //	//execvp(cmd[0], cmd);
 //}
 
+char ***form_commands(char **splited)
+{
+	int i;
+	int arr_len;
+	char ***commands;
+
+	i = 0;
+	arr_len = array_len(splited);
+	commands = (char ***)malloc(sizeof(char **) * (arr_len + 1));
+	commands[arr_len] = NULL;
+	while (i < arr_len)
+	{
+		commands[i] = ft_split_whitespaces(splited[i]);
+		i++;
+	}
+	return (commands);
+}
+
 void pipes_and_redirections(char **splited)
 {
 	int i;
@@ -100,12 +118,9 @@ void pipes_and_redirections(char **splited)
 
 void execute_command(char *cmd)
 {
-	char *trimed;
 	char **splited;
 
-	trimed = ft_strtrim(cmd);
-	splited = ft_strsplit(trimed, '|');
+	splited = ft_strsplit(cmd, '|');
 	pipes_and_redirections(splited);
-	ft_strdel(&trimed);
 	ft_free_tab((void **)splited);
 }
