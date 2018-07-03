@@ -46,6 +46,8 @@ srcs/builtins/bi_history.c \
 srcs/builtins/bi_pwd.c \
 srcs/builtins/bi_setenv.c \
 srcs/builtins/bi_unsetenv.c \
+srcs/builtins/bi_cd.c \
+
 
 
 OBJ = $(SRCS:.c=.o)

@@ -1,6 +1,6 @@
 #include "shell.h"
 
-static void			change_list(char *name, char *new_value)
+void			change_list(char *name, char *new_value)
 {
 	t_env *list;
 

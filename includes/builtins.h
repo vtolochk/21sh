@@ -22,5 +22,6 @@ int bi_history(char **argv);
 int bi_pwd(char **argv);
 int bi_setenv(char **argv);
 int bi_unsetenv(char **argv);
+int bi_cd(char **argv);
 
 #endif

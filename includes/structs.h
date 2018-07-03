@@ -20,6 +20,8 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <sys/stat.h>
+#include <dirent.h>
+# include <sys/param.h>
 
 # define BUFFER_SIZE 4096
 
