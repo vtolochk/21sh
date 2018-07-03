@@ -37,36 +37,6 @@ void quoting(void)
 	g_data.command_len = ft_strlen(g_data.command);
 }
 
-// this function will split function and ignoring ; 
-// if its between quotes
-char **semi_colon_split(char *str) 
-{
-	int i;
-	char quote;
-	char **result;
-	char **for_free;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' || str[i] == '\"')
-		{
-			quote = str[i];
-			while (str[++i] != quote)
-			{
-				if (str[i] == ';')
-					str[i] = ' ';
-			}
-		}
-		i++;
-	}
-	result = ft_strsplit(str, ';');
-	for_free = result;
-	result = trim_all_the_array(result);
-	ft_free_tab((void **)for_free);
-	return result;
-}
-
 void command_process(void)
 {
 	int i;

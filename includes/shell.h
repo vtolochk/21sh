@@ -67,7 +67,6 @@ void        clear_line(void);
 char check_unclosing(void);
 void wait_quote(char quote);
 void quoting(void);
-
 char **semi_colon_split(char *str);
 
 void command_process(void);
