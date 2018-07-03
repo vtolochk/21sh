@@ -47,8 +47,11 @@ void command_process(void)
 	history_actions(WORK);
 	quoting();
 	commands = semi_colon_split(g_data.command);
-	while (commands[i])
-		execute_command(commands[i++]);
+	if (commands)
+	{
+		while (commands[i])
+			execute_command(commands[i++]);
+	}
 	ft_free_tab((void **)commands);
 	annulment();
 	print_prompt();

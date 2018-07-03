@@ -24,7 +24,7 @@ void shell_init(char **env)
 
 void shell_exit(void)
 {
-	// TODO: free env list
+	free_env_list(g_data.environ);
 	history_actions(EXIT);
 	set_old_mode();
 	exit(OK);

@@ -63,18 +63,20 @@ int			print_command(int sign);
 void        capability(char *name);
 void        capability_n(char *name, int n);
 void        clear_line(void);
-
-char check_unclosing(void);
-void wait_quote(char quote);
-void quoting(void);
-char **semi_colon_split(char *str);
-
-void command_process(void);
-void execute_command(char *cmd);
+char		check_unclosing(void);
+void		wait_quote(char quote);
+void		quoting(void);
+char		**semi_colon_split(char *str);
+void		command_process(void);
+void		execute_command(char *cmd);
 char		**list_to_array(void);
 int			list_len(t_env *lst);
+char		***form_commands(char **splited);
+char 		**smart_whitespaces_split(char *str);
+char		**smart_pipe_split(char *str);
 
-char ***form_commands(char **splited);
+void free_env_list(t_env *environ);
+
 
 void var_dump(char **arr);
 void var_dump_arr(char ***arr);

@@ -24,7 +24,10 @@ srcs/history/history_helpers.c srcs/cursor/copy_paste_actions.c \
 srcs/cursor/cut_command.c srcs/execute_command.c \
 srcs/quoting.c srcs/builtins/check_builtins.c srcs/builtins/bi_echo.c \
 srcs/builtins/bi_exit.c \
-srcs/semi_colon_split.c
+srcs/semi_colon_split.c \
+srcs/smart_whitespaces_split.c \
+srcs/smart_pipe_split.c \
+
 
 OBJ = $(SRCS:.c=.o)
 

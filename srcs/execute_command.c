@@ -56,8 +56,8 @@ void    pipe_loop(char ***cmd)
 			close(pipe_fds[0]);
 			if (cmd[i + 1] != NULL)
 				dup2(pipe_fds[1], 1);
-			//execve(cmd[i][0], cmd[i], environ);
-			execvp(cmd[i][0], cmd[i]);
+			execve(cmd[i][0], cmd[i], environ);
+			//execvp(cmd[i][0], cmd[i]);
 			exit(0);
 		}
 		else
@@ -94,7 +94,7 @@ char ***form_commands(char **splited)
 	commands[arr_len] = NULL;
 	while (i < arr_len)
 	{
-		commands[i] = ft_split_whitespaces(splited[i]);
+		commands[i] = smart_whitespaces_split(splited[i]);
 		i++;
 	}
 	return (commands);
@@ -109,10 +109,7 @@ void pipes_and_redirections(char **splited)
 	commands = form_commands(splited);
 	pipe_loop(commands);
 	while (commands[i])
-	{
-		ft_free_tab((void **)commands[i]);
-		i++;
-	}
+		ft_free_tab((void **)commands[i++]);
 	free(commands);
 }
 
@@ -120,7 +117,7 @@ void execute_command(char *cmd)
 {
 	char **splited;
 
-	splited = ft_strsplit(cmd, '|');
+	splited = smart_pipe_split(cmd);
 	pipes_and_redirections(splited);
 	ft_free_tab((void **)splited);
 }

@@ -111,3 +111,17 @@ char		**list_to_array(void)
 	envp[i] = NULL;
 	return (envp);
 }
+
+void free_env_list(t_env *environ)
+{
+	t_env *temp;
+
+	while (environ)
+	{
+		ft_strdel(&environ->name);
+		ft_strdel(&environ->value);
+		temp = environ;
+		environ = environ->next;
+		free(temp);
+	}
+}
