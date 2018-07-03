@@ -44,6 +44,7 @@ char **semi_colon_split(char *str)
 	char **temp;
 	//char **result;
 	printf("I am on semi_colon_split branch\n");
+	printf("I am on semi_colon_split branch\n");
 	temp = ft_strsplit(str, ';');
 	if (!temp)
 	{
