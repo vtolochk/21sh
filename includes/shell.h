@@ -76,7 +76,7 @@ char 		**smart_whitespaces_split(char *str);
 char		**smart_pipe_split(char *str);
 void 		free_env_list(t_env *environ);
 char		*get_value_by_name(char *name);
-
+t_env	*new_node(void);
 
 void var_dump(char **arr);
 void var_dump_arr(char ***arr);

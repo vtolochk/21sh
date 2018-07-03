@@ -26,7 +26,7 @@ static int		get_index(char *str, char c)
 	return (i);
 }
 
-static t_env	*new_node(void)
+t_env	*new_node(void)
 {
 	t_env *node;
 
