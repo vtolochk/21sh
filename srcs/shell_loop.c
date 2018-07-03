@@ -38,12 +38,12 @@ void quoting(void)
 }
 
 // this function will split function and ignoring ; 
-//if its between quotes
+// if its between quotes
 char **semi_colon_split(char *str) 
 {
 	char **temp;
 	//char **result;
-
+	printf("I am on semi_colon_split branch\n");
 	temp = ft_strsplit(str, ';');
 	if (!temp)
 	{
