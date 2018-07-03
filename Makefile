@@ -41,6 +41,8 @@ srcs/builtins/check_builtins.c \
 srcs/builtins/bi_echo.c \
 srcs/builtins/bi_exit.c \
 srcs/builtins/bi_clear.c \
+srcs/builtins/bi_env.c \
+srcs/builtins/bi_history.c \
 
 
 OBJ = $(SRCS:.c=.o)

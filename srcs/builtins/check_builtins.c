@@ -20,6 +20,10 @@ int check_builtins(char **argv)
 		return (bi_exit(argv));
 	else if (ft_strequ(argv[0], "clear"))
 		return (bi_clear(argv));
+	else if (ft_strequ(argv[0], "env"))
+		return (bi_env(argv));
+	else if (ft_strequ(argv[0], "history"))
+		return (bi_history(argv));
 //	else if (ft_strequ(argv[0], "cd"))
 //		return (bi_cd(argv));
 //	else if (ft_strequ(argv[0], "pwd"))
@@ -28,10 +32,5 @@ int check_builtins(char **argv)
 //		return (bi_setenv(argv));
 //	else if (ft_strequ(argv[0], "unsetenv"))
 //		return (bi_unsetenv(argv, 0));
-//	else if (ft_strequ(argv[0], "env"))
-//		return (bi_env(argv));
-
-//	else if (ft_strequ(argv[0], "history"))
-//		return (bi_history(argv));
 	return (0);
 }
