@@ -125,3 +125,22 @@ void free_env_list(t_env *environ)
 		free(temp);
 	}
 }
+
+char		*get_value_by_name(char *name)
+{
+	char		*value;
+	t_env	*list;
+
+	value = NULL;
+	list = g_data.environ;
+	while (list)
+	{
+		if (ft_strequ(name, list->name))
+		{
+			value = list->value;
+			break ;
+		}
+		list = list->next;
+	}
+	return (value);
+}

@@ -75,6 +75,7 @@ char		***form_commands(char **splited);
 char 		**smart_whitespaces_split(char *str);
 char		**smart_pipe_split(char *str);
 void 		free_env_list(t_env *environ);
+char		*get_value_by_name(char *name);
 
 
 void var_dump(char **arr);

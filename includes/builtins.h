@@ -19,5 +19,6 @@ int bi_exit(char **argv);
 int bi_clear(char **argv);
 int bi_env(char **argv);
 int bi_history(char **argv);
+int bi_pwd(char **argv);
 
 #endif
