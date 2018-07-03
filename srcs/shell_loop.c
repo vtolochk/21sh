@@ -41,29 +41,35 @@ void quoting(void)
 // if its between quotes
 char **semi_colon_split(char *str) 
 {
-	char **temp;
-	//char **result;
-	printf("I am on semi_colon_split branch\n");
-	printf("I am on semi_colon_split branch\n");
-	temp = ft_strsplit(str, ';');
-	if (!temp)
+	int i;
+	char quote;
+	char **result;
+	char **for_free;
+
+	i = 0;
+	while (str[i])
 	{
-		printf("return null from split\n");
-		return (NULL);
+		if (str[i] == '\'' || str[i] == '\"')
+		{
+			quote = str[i];
+			while (str[++i] != quote)
+			{
+				if (str[i] == ';')
+					str[i] = ' ';
+			}
+		}
+		i++;
 	}
-	while (*temp)
-	{
-		printf("str: %s\n", *temp);
-		temp++;
-	}
-	printf("return null\n");
-	return NULL;
+	result = ft_strsplit(str, ';');
+	for_free = result;
+	result = trim_all_the_array(result);
+	ft_free_tab((void **)for_free);
+	return result;
 }
 
 void command_process(void)
 {
 	int i;
-	char **for_free;
 	char **commands;
 
 	i = 0;
@@ -71,17 +77,16 @@ void command_process(void)
 	history_actions(WORK);
 	quoting();
 	commands = semi_colon_split(g_data.command);
-	for_free = commands;
 	while (commands[i])
 		execute_command(commands[i++]);
-	ft_free_tab((void **)for_free);
+	ft_free_tab((void **)commands);
 	annulment();
 	print_prompt();
 }
 
 void shell_loop(void)
 {
-	while (1)
+	while (13)
 	{
 		get_screen_size();
 		get_rows();

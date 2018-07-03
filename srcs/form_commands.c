@@ -112,7 +112,7 @@ static char **quoted_split(char *str)
 			break ;
 		i++;
 	}
-	var_dump(new_arr);
+	//var_dump(new_arr);
 	return (new_arr);
 }
 
