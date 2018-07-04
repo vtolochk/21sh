@@ -81,6 +81,12 @@ void			change_list(char *name, char *new_value);
 void refresh_prompt_len(void);
 void substitute_tild(char **str);
 void substitute_env_var(char **str);
+int		count_sign(char *str, char sign);
+int		is_dir(char *full_path);
+int		is_real_file(char *dir, char *name);
+
+int is_redirect(char **argv);
+t_redirect redirect(char **cmd);
 
 void var_dump(char **arr);
 void var_dump_arr(char ***arr);

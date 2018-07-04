@@ -36,6 +36,15 @@
 # define RIGHT_ARR 43
 # define LEFT_ARR 44
 
+typedef struct s_redirect
+{
+	char *filename;
+	int flags;
+	int file_fd;
+	int redirect_fd;
+	int redirection_direction;
+	int stdoutCopy;
+}				t_redirect;
 
 typedef struct s_env
 {

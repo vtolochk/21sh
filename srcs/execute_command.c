@@ -194,7 +194,14 @@ void    pipe_loop(char ***cmd)
 				dup2(pipe_fds[1], 1);
 			char *full_path_to_file = get_full_path_to_file(cmd[i]);
 			if (full_path_to_file)
-				execve(full_path_to_file, cmd[i], environ);
+			{
+				if (is_redirect(cmd[i]))
+				{
+					printf("its redirect\n");
+				}
+				else
+					execve(full_path_to_file, cmd[i], environ);
+			}
 			ft_strdel(&full_path_to_file);
 			exit(0);
 		}
@@ -209,16 +216,6 @@ void    pipe_loop(char ***cmd)
 	waitpid(pid, 0, 0);
 	kill(0, 0);
 }
-
-//void redirect_to_the_file(char **cmd, char *filename, int flags, int redirect_fd)
-//{
-//	int file_fd;
-//
-//	file_fd = open(filename, flags, 0666);
-//	dup2(file_fd, redirect_fd);
-//	//new_process();
-//	//execvp(cmd[0], cmd);
-//}
 
 char ***form_commands(char **splited)
 {

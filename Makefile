@@ -49,6 +49,8 @@ srcs/builtins/bi_unsetenv.c \
 srcs/builtins/bi_cd.c \
 srcs/substitute_tild.c \
 srcs/substitute_env_var.c \
+srcs/redirections.c \
+srcs/count_sign.c \
 
 
 OBJ = $(SRCS:.c=.o)
