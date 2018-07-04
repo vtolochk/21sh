@@ -8,6 +8,7 @@ static void smart_helper(char **arr)
 	i = 0;
 	while (arr[i])
 	{
+		substitute_tild(&arr[i]);
 		j = 0;
 		while (arr[i][j])
 		{

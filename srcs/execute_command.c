@@ -159,8 +159,6 @@ char *get_full_path_to_file(char **argv)
 		ft_putstr_fd(file, 2);
 		ft_putstr_fd("\n", 2);
 	}
-	// ft_printf("dir: |%s| file: |%s|\n", dir, file);
-	// ft_printf("full path; |%s|\n", full_path);
 	ft_strdel(&dir);
 	ft_strdel(&file);
 	return (full_path);
