@@ -21,6 +21,7 @@ int bi_echo(char **argv)
 	while (argv[i])
 	{
 		j = 0;
+		substitute_tild(&argv[i]);
 		while (argv[i][j])
 		{
 			if (argv[i][j] == '\'' || argv[i][j] == '\"')

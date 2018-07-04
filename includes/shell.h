@@ -79,6 +79,7 @@ char		*get_value_by_name(char *name);
 t_env	*new_node(void);
 void			change_list(char *name, char *new_value);
 void refresh_prompt_len(void);
+void substitute_tild(char **str);
 
 void var_dump(char **arr);
 void var_dump_arr(char ***arr);

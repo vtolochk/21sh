@@ -4,6 +4,7 @@ static int		is_permission_and_exist(char **argv)
 {
 	struct stat buf;
 
+	substitute_tild(&argv[1]);
 	if (argv[1] && argv[2])
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
@@ -37,7 +38,6 @@ int bi_cd(char **argv)
 {
 	char		buf[MAXPATHLEN];
 
-	//need a function to substitute tild
 	if (!argv[1])
 	{
 		getcwd(buf, MAXPATHLEN);
@@ -48,10 +48,10 @@ int bi_cd(char **argv)
 	}
 	else if (ft_strequ(argv[1], "-"))
 	{
-		getcwd(buf, MAXPATHLEN);
-		change_list("PWD", get_value_by_name("OLDPWD"));
 		chdir(get_value_by_name("OLDPWD"));
-		change_list("OLDPWD", buf);
+		getcwd(buf, MAXPATHLEN);
+		change_list("OLDPWD", get_value_by_name("PWD"));
+		change_list("PWD", buf);
 	}
 	else if (is_permission_and_exist(argv))
 	{

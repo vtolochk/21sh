@@ -47,6 +47,7 @@ srcs/builtins/bi_pwd.c \
 srcs/builtins/bi_setenv.c \
 srcs/builtins/bi_unsetenv.c \
 srcs/builtins/bi_cd.c \
+srcs/substitute_tild.c \
 
 
 OBJ = $(SRCS:.c=.o)
