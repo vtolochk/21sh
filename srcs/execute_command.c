@@ -29,6 +29,144 @@ void var_dump_arr(char ***arr)
 	}
 }
 
+int		is_real_file(char *dir, char *name)
+{
+	DIR *dir_ptr;
+	struct dirent *dir_info;
+
+	if (!(dir_ptr = opendir(dir)))
+			return (0);
+	while ((dir_info = readdir(dir_ptr)))
+	{
+		if (ft_strequ(dir_info->d_name, name))
+		{
+			closedir(dir_ptr);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+char	*create_full_path(char *dir, char *name)
+{
+	char *temp;
+	char *full_path;
+
+	full_path = ft_strjoin(dir, "/");
+	temp = full_path;
+	full_path = ft_strjoin(full_path, name);
+	ft_strdel(&temp);
+	return (full_path);
+}
+
+int		is_dir(char *full_path)
+{
+	DIR *ptr;
+
+	if ((ptr = opendir(full_path)))
+		return (1);
+	return (0);
+}
+
+int	can_execute(char *full_path, char *file)
+{
+	if (access(full_path, X_OK) == -1)
+	{
+		ft_putstr_fd("shell: permission denied: ", 2);
+		ft_putstr_fd(file, 2);
+		ft_putstr_fd("\n", 2);
+		return (0);
+	}
+	else if (is_dir(full_path))
+	{
+		ft_putstr_fd("shell: ", 2);
+		ft_putstr_fd(full_path, 2);
+		ft_putstr_fd(" cannot execute [It is a directory]\n", 2);
+		return (0);
+	}
+	return (1);
+}
+
+void	get_dir_and_file(char **argv, char **dir, char **file)
+{
+	char *find;
+
+	find = ft_strrchr(argv[0], '/');
+	if (find)
+	{
+		*dir = ft_strsub(argv[0], 0, find - argv[0]);
+		*file = ft_strsub(argv[0], ft_strlen(*dir) + 1, \
+		ft_strlen(argv[0]) - ft_strlen(*dir));
+	}
+	else
+	{
+		*dir = NULL;
+		*file = ft_strdup(argv[0]);
+	}
+}
+
+char *try_to_find_a_file(char *dir, char *file)
+{
+	int i;
+	char *path;
+	char *full_path;
+	char **path_names;
+
+	i = 0;
+	full_path = NULL;
+	if (dir && is_real_file(dir, file))
+	{
+		full_path = create_full_path(dir, file);
+		if (can_execute(full_path, file))
+			return (full_path);
+	}
+	else
+	{
+		if (!(path = get_value_by_name("PATH")) || !(path_names = ft_strsplit(path, ':')))
+			return (NULL);
+		while (path_names[i])
+		{
+			if (is_real_file(path_names[i], file))
+			{
+				full_path = create_full_path(path_names[i], file);
+				break ;
+			}
+			i++;
+		}
+		ft_free_tab((void **)path_names);
+	}
+	return (full_path);
+}
+
+char *get_full_path_to_file(char **argv)
+{
+	char *dir;
+	char *file;
+	char *full_path;
+
+	full_path = NULL;
+	get_dir_and_file(argv, &dir, &file);
+	full_path = try_to_find_a_file(dir, file);
+	if (!full_path && dir)
+	{
+		ft_putstr_fd("shell: no such file or directory: ", 2);
+		ft_putstr_fd(file, 2);
+		ft_putstr_fd("\n", 2);
+	}
+	else if (!full_path)
+	{
+		ft_putstr_fd("shell: command not found: ", 2);
+		ft_putstr_fd(file, 2);
+		ft_putstr_fd("\n", 2);
+	}
+	// ft_printf("dir: |%s| file: |%s|\n", dir, file);
+	// ft_printf("full path; |%s|\n", full_path);
+	ft_strdel(&dir);
+	ft_strdel(&file);
+	return (full_path);
+}
+
+
 void    pipe_loop(char ***cmd)
 {
 	int i;
@@ -56,8 +194,10 @@ void    pipe_loop(char ***cmd)
 			close(pipe_fds[0]);
 			if (cmd[i + 1] != NULL)
 				dup2(pipe_fds[1], 1);
-			execve(cmd[i][0], cmd[i], environ);
-			//execvp(cmd[i][0], cmd[i]);
+			char *full_path_to_file = get_full_path_to_file(cmd[i]);
+			if (full_path_to_file)
+				execve(full_path_to_file, cmd[i], environ);
+			ft_strdel(&full_path_to_file);
 			exit(0);
 		}
 		else
