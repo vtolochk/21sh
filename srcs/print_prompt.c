@@ -12,15 +12,21 @@
 
 #include "shell.h"
 
+void refresh_prompt_len(void)
+{
+	int new_len;
+
+	new_len = ft_strlen(get_value_by_name("PWD"));
+	g_data.prompt_len = new_len + 4;
+}
+
 void print_prompt(void)
 {
-	//temporary
-	//write(1, "\n", 1);
-	//
-
-	ft_putstr_fd(RED, 1);
-	ft_putstr_fd("shell > ", 1); // change to the second flow
-	ft_putstr_fd(EOC, 1);
-	g_data.prompt_len = 8;
-//TODO: strlen prompt_str
+	ft_putstr_fd(BLUE, 2);
+	ft_putstr_fd(get_value_by_name("PWD"), 2);
+	ft_putstr_fd(EOC, 2);
+	ft_putstr_fd(GREY, 2);
+	ft_putstr_fd(" $> ", 2);
+	ft_putstr_fd(EOC, 2);
+	refresh_prompt_len();
 }

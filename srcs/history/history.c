@@ -54,7 +54,7 @@ void history_down(char *last_command)
 			ft_strcpy(g_data.command, last_command);
 			g_data.cursor += ft_strlen(g_data.command);
 			g_data.command_len = ft_strlen(g_data.command);
-			g_data.line = (g_data.command_len / g_data.ws_col) + 1;
+			g_data.line = ((g_data.command_len + g_data.prompt_len) / g_data.ws_col) + 1;
 		}
 		return ;
 	}
@@ -63,7 +63,7 @@ void history_down(char *last_command)
 	ft_strcpy(g_data.command, g_data.history_list->command);
 	g_data.cursor += ft_strlen(g_data.command);
 	g_data.command_len = ft_strlen(g_data.command);
-	g_data.line = (g_data.command_len / g_data.ws_col) + 1;
+	g_data.line = ((g_data.command_len + g_data.prompt_len) / g_data.ws_col) + 1;
 }
 
 void history_up(void)
@@ -74,13 +74,16 @@ void history_up(void)
 		g_data.history_list = g_data.history_list->next;
 	clean_screen_after_prompt();
 	if (!g_data.history_list->command)
+	{
+		ft_bzero(g_data.command, sizeof(g_data.command));
 		return ;
+	}
 	ft_putstr_fd(g_data.history_list->command, 1);
 	ft_bzero(g_data.command, sizeof(g_data.command));
 	ft_strcpy(g_data.command, g_data.history_list->command);
 	g_data.cursor += ft_strlen(g_data.command);
 	g_data.command_len = ft_strlen(g_data.command);
-	g_data.line = (g_data.command_len / g_data.ws_col) + 1;
+	g_data.line = ((g_data.command_len + g_data.prompt_len)/ g_data.ws_col) + 1;
 }
 
 void history_actions(int command)

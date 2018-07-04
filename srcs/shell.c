@@ -16,9 +16,9 @@ void shell_init(char **env)
 {
 	if (set_shell_mode() == FAIL)
 		shell_exit();
-	print_prompt();
-	annulment();
 	g_data.environ = copy_env(env);
+	annulment();
+	print_prompt();
 	g_data.history_list = history_new_node(NULL);
 }
 

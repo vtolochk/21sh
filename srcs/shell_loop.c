@@ -16,7 +16,7 @@ void annulment(void)
 {
 	g_data.line = 1;
 	g_data.command_len = 0;
-	g_data.prompt_len = 8; // temporary; need to change each time
+	refresh_prompt_len();
 	g_data.cursor = g_data.prompt_len;
 	ft_bzero(g_data.command, sizeof(g_data.command));
 	ft_bzero(&g_data.key[0], 8);

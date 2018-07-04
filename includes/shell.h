@@ -21,8 +21,8 @@
 #include "builtins.h"
 
 # define EOC "\e[0m"
-# define RED "\e[38;5;197m"
-# define BLUE "\e[38;5;69m"
+# define BLUE "\e[1;38;5;33m"
+# define GREY "\e[1;38;5;59m"
 
 # define TAB '\t'
 # define ESC 27
@@ -78,6 +78,7 @@ void 		free_env_list(t_env *environ);
 char		*get_value_by_name(char *name);
 t_env	*new_node(void);
 void			change_list(char *name, char *new_value);
+void refresh_prompt_len(void);
 
 void var_dump(char **arr);
 void var_dump_arr(char ***arr);
