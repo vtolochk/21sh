@@ -36,27 +36,25 @@ int bi_setenv(char **argv)
 	char *name;
 	char *new_value;
 
-	if (!(argv[1]) || 
-	!(ft_strchr(argv[1], '=')) ||	
-	argv[1][0] == '=' || 
-	argv[2] || 
-	argv[1][0] != '$' || 
+	if (!(argv[1]) || !(ft_strchr(argv[1], '=')) ||	argv[1][0] == '=' || argv[2] || argv[1][0] != '$' || 
 	!(name = ft_strsub(argv[1], 0, ft_strchr(argv[1], '=') - argv[1])) ||
 	!(new_value = ft_strsub(argv[1], (ft_strchr(argv[1], '=') - argv[1]) + 1, ft_strlen(argv[1]))))
-	{
 		ft_putstr_fd("Usage: setenv [$NAME]=[VALUE]\n", 2);
-	}
 	else
 	{
 		if (ft_strequ(name, "$PWD") || ft_strequ(name, "$HOME") ||
 			ft_strequ(name, "$OLDPWD"))
-		{
 			ft_printf("This variable cannot be changed.\n");
-		}
 		else if (get_value_by_name(&name[1]))
+		{
+			substitute_env_var(&new_value);
 			change_list(&name[1], new_value);
+		}
 		else
+		{
+			substitute_env_var(&new_value);
 			add_variable(&name[1], new_value);
+		}	
 		ft_strdel(&name);
 		ft_strdel(&new_value);
 	}
