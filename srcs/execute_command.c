@@ -182,11 +182,10 @@ void    pipe_loop(char ***cmd)
 	while (cmd[i] != NULL)
 	{
 		if (is_redirect(cmd[i]))
-			redirect(cmd[i], &info);
+			validate_redirection(cmd[i], &info);
 		if (check_builtins(cmd[i]))
 		{
 			i++;
-			close_redirect(&info);
 			continue ;
 		}
 		pipe(pipe_fds);
