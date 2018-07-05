@@ -54,45 +54,72 @@ int is_str_redirect(char *str)
 	return (0);
 }
 
-void get_info(char *cmd, t_redirect **info)
+void get_info(char *cmd, char *next_cmd)
 {
-	(*info)->filename = "kaka";
-	printf("get info cmd=|%s|, info_filename |%s|", cmd, (*info)->filename);			
+		(void)cmd;
+		(void)next_cmd;
+		g_redirect_info[g_redIter].filename = "fdsa";
 }
 
-
-int validate_redirection(char **cmd, t_redirect *info)
+int redirections_nb(char **cmd)
 {
 	int i;
+	int res;
 
 	i = 0;
+	res = 0;
+	while (cmd[i])
+	{
+		if (is_str_redirect(cmd[i]))
+		{
+			if (is_str_redirect(cmd[i + 1]))
+				return (0);
+			if (redirection_regexp(cmd[i], 1))
+				return (0);
+			res++;
+		}
+		i++;
+	}
+	return (res);
+}
+
+int validate_redirection(char **cmd)
+{
+	int redirect_nb;
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	redirect_nb = redirections_nb(cmd);
+	printf("nb = %d\n", redirect_nb);
 	while (cmd[i])
 	{
 		if (is_str_redirect(cmd[i]))
 		{
 			if (is_str_redirect(cmd[i + 1]))
 				return (redirection_error());
-			if (redirection_regexp(cmd[i]))
+			if (redirection_regexp(cmd[i], 0))
 				return (1);
-		}
-		get_info(cmd[i], &info);
-		if (!info->filename)
-			return (redirection_error());
-		else
-		{
-			if (is_dir(info->filename))
+			get_info(cmd[i], cmd[i + 1]);
+			if (!g_redirect_info[g_redIter].filename)
+				return (redirection_error());
+			else
 			{
-				ft_putstr_fd("shell: is a directory ", 2);
-				ft_putstr_fd(info->filename, 2);
-				ft_putstr_fd("\n", 2);
-				return (1);
-			}
-			else if (access(info->filename, W_OK) == -1 && is_real_file(get_value_by_name("PWD"), info->filename))
-			{
-				ft_putstr_fd("shell: permission denied: ", 2);
-				ft_putstr_fd(info->filename, 2);
-				ft_putstr_fd("\n", 2);
-				return (1);
+				if (is_dir(g_redirect_info[g_redIter].filename))
+				{
+					ft_putstr_fd("shell: is a directory ", 2);
+					ft_putstr_fd(g_redirect_info[g_redIter].filename, 2);
+					ft_putstr_fd("\n", 2);
+					return (1);
+				}
+				else if (access(g_redirect_info[g_redIter].filename, W_OK) == -1 && is_real_file(get_value_by_name("PWD"), g_redirect_info[g_redIter].filename))
+				{
+					ft_putstr_fd("shell: permission denied: ", 2);
+					ft_putstr_fd(g_redirect_info[g_redIter].filename, 2);
+					ft_putstr_fd("\n", 2);
+					return (1);
+				}
 			}
 		}
 		i++;
@@ -100,11 +127,11 @@ int validate_redirection(char **cmd, t_redirect *info)
 	return (0);
 }
 
-void redirect_open(t_redirect *info)
+void redirect_open(void)
 {
-	info->file_fd = open(info->filename, info->flags, 0666);
-	info->stdoutCopy = dup(info->redirect_fd);
-	dup2(info->file_fd, info->redirect_fd);
+	g_redirect_info[g_redIter].file_fd = open(g_redirect_info[g_redIter].filename, g_redirect_info[g_redIter].flags, 0666);
+	g_redirect_info[g_redIter].stdoutCopy = dup(g_redirect_info[g_redIter].redirect_fd);
+	dup2(g_redirect_info[g_redIter].file_fd, g_redirect_info[g_redIter].redirect_fd);
 }
 
 int redirection_error(void)
@@ -113,7 +140,7 @@ int redirection_error(void)
 	return (1);
 }
 
-int redirection_regexp(char *str)
+int redirection_regexp(char *str, char silent_mode)
 {
 	int i;
 
@@ -121,39 +148,46 @@ int redirection_regexp(char *str)
 	while (str[i] != '>' && str[i] != '<')
 	{
 		if (!ft_isdigit(str[i]) && str[i] != '&')
-			return (redirection_error());
+			return (silent_mode ? 1 : redirection_error());
 		else if ((ft_isdigit(str[i]) && str[i + 1] == '&') || (str[i] == '&' && ft_isdigit(str[i + 1])))
-			return (redirection_error());
+			return (silent_mode ? 1 : redirection_error());
 		i++;
 	}
 	if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
 	{	
 		i++;
 		if ((str[i] == '>' && str[i + 1] == '>') || (str[i] == '<' && str[i + 1] == '<'))
-			return(redirection_error());
+			return(silent_mode ? 1 : redirection_error());
 		return (0);
 	}
 	else if ((str[i] == '>' && str[i+1] != '>') || (str[i] == '<' && str[i+1] != '<'))
 		return (0);
-	return (redirection_error());
+	return (silent_mode ? 1 : redirection_error());
 }
 
-void init_redirect(t_redirect *info)
+void init_redirect(void)
 {
-	info->filename = NULL;
-	info->flags = 0;
-	info->file_fd = -1;
-	info->redirect_fd = 1;
-	info->redirection_direction = 0;
-	info->stdoutCopy = -1;
-}
+	int i;
 
-void redirect_close(t_redirect *info)
-{
-	if (info->stdoutCopy >= 0)
+	i = 0;
+	while (i < MAX_REDIRECT)
 	{
-		dup2(info->stdoutCopy, info->redirect_fd);
-		close(info->stdoutCopy);
-		close(info->file_fd);
+		g_redirect_info[i].filename = NULL;
+		g_redirect_info[i].flags = 0;
+		g_redirect_info[i].file_fd = -1;
+		g_redirect_info[i].redirect_fd = 1;
+		g_redirect_info[i].redirection_direction = 0;
+		g_redirect_info[i].stdoutCopy = -1;
+		i++;
+	}
+}
+
+void redirect_close(void)
+{
+	if (g_redirect_info[g_redIter].stdoutCopy >= 0)
+	{
+		dup2(g_redirect_info[g_redIter].stdoutCopy, g_redirect_info[g_redIter].redirect_fd);
+		close(g_redirect_info[g_redIter].stdoutCopy);
+		close(g_redirect_info[g_redIter].file_fd);
 	}
 }

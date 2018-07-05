@@ -42,6 +42,8 @@
 # define FAIL 1
 # define OK 0
 
+
+
 # include <stdio.h>
 
 t_env		*copy_env(char **env);
@@ -87,13 +89,14 @@ int		is_real_file(char *dir, char *name);
 
 int is_redirect(char **argv);
 int is_str_redirect(char *str);
-void get_info(char *cmd, t_redirect **info);
-int validate_redirection(char **cmd, t_redirect *info);
-void redirect_open(t_redirect *info);
+void get_info(char *cmd, char *next_cmd);
+int validate_redirection(char **cmd);
+void redirect_open(void);
 int redirection_error(void);
-int redirection_regexp(char *str);
-void init_redirect(t_redirect *info);
-void redirect_close(t_redirect *info);
+int redirection_regexp(char *str, char silen_mode);
+void init_redirect(void);
+void redirect_close(void);
+int redirections_nb(char **cmd);
 
 void var_dump(char **arr);
 void var_dump_arr(char ***arr);

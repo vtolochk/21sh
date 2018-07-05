@@ -23,6 +23,7 @@
 #include <dirent.h>
 # include <sys/param.h>
 
+# define MAX_REDIRECT 128
 # define BUFFER_SIZE 4096
 
 # define  ONE_ARROW O_CREAT | O_WRONLY | O_TRUNC
@@ -35,6 +36,8 @@
 # define PIPE 42
 # define RIGHT_ARR 43
 # define LEFT_ARR 44
+
+
 
 typedef struct s_redirect
 {
@@ -78,5 +81,7 @@ typedef struct s_shell
 }               t_shell;
 
 t_shell g_data;
+t_redirect g_redirect_info[MAX_REDIRECT];
+int g_redIter;
 
 #endif

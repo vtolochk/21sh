@@ -167,7 +167,6 @@ char *get_full_path_to_file(char **argv)
 
 void    pipe_loop(char ***cmd)
 {
-	t_redirect info;
 	int i;
 	pid_t pid;
 	int   fd_in;
@@ -178,11 +177,11 @@ void    pipe_loop(char ***cmd)
 	pid = 0;
 	fd_in = 0;
 	environ = list_to_array();
-	init_redirect(&info);
+	init_redirect();
 	while (cmd[i] != NULL)
 	{
 		if (is_redirect(cmd[i]))
-			validate_redirection(cmd[i], &info);
+			validate_redirection(cmd[i]);
 		if (check_builtins(cmd[i]))
 		{
 			i++;
