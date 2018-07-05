@@ -86,7 +86,11 @@ int		is_dir(char *full_path);
 int		is_real_file(char *dir, char *name);
 
 int is_redirect(char **argv);
-t_redirect redirect(char **cmd);
+void redirect(char **cmd, t_redirect *info);
+void close_redirect(t_redirect *info);
+int redirection_regexp(char *str);
+
+void init_redirect(t_redirect *info);
 
 void var_dump(char **arr);
 void var_dump_arr(char ***arr);

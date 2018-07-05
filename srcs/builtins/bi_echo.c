@@ -16,21 +16,13 @@ int bi_echo(char **argv)
 {
 	int i;
 	int j;
-	t_redirect info;
-
+	
 	i = 1;
-	while (argv[i])
-	{
-		substitute_tild(&argv[i]);
-		substitute_env_var(&argv[i]);
-		i++;
-	}
-	i = 1;
-	if (is_redirect(argv))
-		info = redirect(argv); // better send it as param
 	while (argv[i])
 	{
 		j = 0;
+		substitute_tild(&argv[i]);
+		substitute_env_var(&argv[i]);
 		while (argv[i][j])
 		{
 			if (argv[i][j] == '\'' || argv[i][j] == '\"')
@@ -45,10 +37,5 @@ int bi_echo(char **argv)
 		i++;
 	}
 	write(STDOUT_FILENO, "\n", 1);
-	if (info.stdoutCopy >= 0)
-	{
-		dup2(info.stdoutCopy, info.redirect_fd);
-		close(info.stdoutCopy);
-	}
 	return (1);
 }

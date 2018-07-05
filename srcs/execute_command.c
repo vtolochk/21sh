@@ -167,6 +167,7 @@ char *get_full_path_to_file(char **argv)
 
 void    pipe_loop(char ***cmd)
 {
+	t_redirect info;
 	int i;
 	pid_t pid;
 	int   fd_in;
@@ -177,11 +178,15 @@ void    pipe_loop(char ***cmd)
 	pid = 0;
 	fd_in = 0;
 	environ = list_to_array();
+	init_redirect(&info);
 	while (cmd[i] != NULL)
 	{
+		if (is_redirect(cmd[i]))
+			redirect(cmd[i], &info);
 		if (check_builtins(cmd[i]))
 		{
 			i++;
+			close_redirect(&info);
 			continue ;
 		}
 		pipe(pipe_fds);
@@ -195,12 +200,7 @@ void    pipe_loop(char ***cmd)
 			char *full_path_to_file = get_full_path_to_file(cmd[i]);
 			if (full_path_to_file)
 			{
-				if (is_redirect(cmd[i]))
-				{
-					printf("its redirect\n");
-				}
-				else
-					execve(full_path_to_file, cmd[i], environ);
+				execve(full_path_to_file, cmd[i], environ);
 			}
 			ft_strdel(&full_path_to_file);
 			exit(0);
