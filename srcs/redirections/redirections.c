@@ -11,7 +11,8 @@ void print_redirect_info(int i)
 	printf("redirect_to[1]: |%i|\n", g_redirect_info[i].redirect_to[1]);
 	printf("redirection_direction: |%i|\n", g_redirect_info[i].redirection_direction);
 	printf("stdoutCopy: |%i|\n", g_redirect_info[i].stdoutCopy);
-	printf("close: |%i|\n\n", g_redirect_info[i].close ? 1 : 0);
+	printf("close: |%i|\n", g_redirect_info[i].close ? 1 : 0);
+	printf("redirect to term |%i|\n\n",  g_redirect_info[i].redirect_to_term ? 1 : 0);
 }
 
 int is_redirect(char **argv)
@@ -123,11 +124,19 @@ void get_info(char *cmd, char *next_cmd)
 				else
 					g_redirect_info[g_redIter].redirect_to[0] = ft_atoi(&cmd[i]);
 				while (ft_isdigit(cmd[i]))
+				{
 					i++;
-				if (cmd[i])
+					g_redirect_info[g_redIter].redirect_to_term = 1;
+				}
+				if (cmd[i] && !g_redirect_info[g_redIter].redirect_to_term)
 					g_redirect_info[g_redIter].filename = ft_strsub(cmd, i, ft_strlen(cmd));
-				else
+				else if (!g_redirect_info[g_redIter].redirect_to_term)
+				{
 					g_redirect_info[g_redIter].filename = ft_strdup(next_cmd);
+					if (!g_redirect_info[g_redIter].filename)
+						g_redirect_info[g_redIter].redirect_to_term = 1;
+				}
+					
 			}
 			else
 			{
@@ -181,23 +190,26 @@ int validate_redirection(char **cmd)
 			if (redirection_regexp(cmd[i], 0))
 				return (1);
 			get_info(cmd[i], cmd[i + 1]);
-			if (!g_redirect_info[g_redIter].filename)
+			if (!g_redirect_info[g_redIter].filename && !g_redirect_info[g_redIter].redirect_to_term)
 				return (redirection_error());
 			else
 			{
-				if (is_dir(g_redirect_info[g_redIter].filename))
+				if (!g_redirect_info[g_redIter].redirect_to_term)
 				{
-					ft_putstr_fd("shell: is a directory ", 2);
-					ft_putstr_fd(g_redirect_info[g_redIter].filename, 2);
-					ft_putstr_fd("\n", 2);
-					return (1);
-				}
-				else if (access(g_redirect_info[g_redIter].filename, W_OK) == -1 && is_real_file(get_value_by_name("PWD"), g_redirect_info[g_redIter].filename))
-				{
-					ft_putstr_fd("shell: permission denied: ", 2);
-					ft_putstr_fd(g_redirect_info[g_redIter].filename, 2);
-					ft_putstr_fd("\n", 2);
-					return (1);
+					if (is_dir(g_redirect_info[g_redIter].filename))
+					{
+						ft_putstr_fd("shell: is a directory ", 2);
+						ft_putstr_fd(g_redirect_info[g_redIter].filename, 2);
+						ft_putstr_fd("\n", 2);
+						return (1);
+					}
+					else if (access(g_redirect_info[g_redIter].filename, W_OK) == -1 && is_real_file(get_value_by_name("PWD"), g_redirect_info[g_redIter].filename))
+					{
+						ft_putstr_fd("shell: permission denied: ", 2);
+						ft_putstr_fd(g_redirect_info[g_redIter].filename, 2);
+						ft_putstr_fd("\n", 2);
+						return (1);
+					}
 				}
 				g_redIter++;
 			}
@@ -210,11 +222,19 @@ int validate_redirection(char **cmd)
 void redirect_open(int i)
 {
 	print_redirect_info(i);
+
 	g_data.redirect_is_open = 1;
-	g_redirect_info[i].file_fd = open(g_redirect_info[i].filename, g_redirect_info[i].flags, 0666);
+
+	if (!g_redirect_info[i].redirect_to_term)
+		g_redirect_info[i].file_fd = open(g_redirect_info[i].filename, g_redirect_info[i].flags, 0666);
+
+
 	g_redirect_info[i].stdoutCopy = dup(g_redirect_info[i].redirect_fd[0]);
+
 	if (g_redirect_info[i].redirect_fd[1] >= 0)
 		g_redirect_info[i].stderrCopy = dup(g_redirect_info[i].redirect_fd[1]);
+
+		
 	dup2(g_redirect_info[i].file_fd, g_redirect_info[i].redirect_fd[0]);
 }
 
@@ -285,6 +305,7 @@ void init_redirect(void)
 		g_redirect_info[i].redirect_to[0] = 1;
 		g_redirect_info[i].redirect_to[1] = -1;
 		g_redirect_info[i].close = 0;
+		g_redirect_info[i].redirect_to_term = 0;
 		i++;
 	}
 }

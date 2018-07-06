@@ -50,6 +50,7 @@ typedef struct s_redirect
 	int stdoutCopy;
 	int stderrCopy;
 	char close;
+	char redirect_to_term;
 }				t_redirect;
 
 typedef struct s_env
