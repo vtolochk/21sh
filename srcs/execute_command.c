@@ -180,8 +180,6 @@ void    pipe_loop(char ***cmd)
 	init_redirect();
 	while (cmd[i] != NULL)
 	{
-		if (is_redirect(cmd[i]))
-			validate_redirection(cmd[i]);
 		if (check_builtins(cmd[i]))
 		{
 			i++;

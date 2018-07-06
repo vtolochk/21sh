@@ -23,7 +23,7 @@
 #include <dirent.h>
 # include <sys/param.h>
 
-# define MAX_REDIRECT 128
+# define MAX_REDIRECT 512
 # define BUFFER_SIZE 4096
 
 # define  ONE_ARROW O_CREAT | O_WRONLY | O_TRUNC
@@ -44,9 +44,12 @@ typedef struct s_redirect
 	char *filename;
 	int flags;
 	int file_fd;
-	int redirect_fd;
+	int redirect_fd[2];
+	int redirect_to[2];
 	int redirection_direction;
 	int stdoutCopy;
+	int stderrCopy;
+	char close;
 }				t_redirect;
 
 typedef struct s_env
@@ -78,6 +81,7 @@ typedef struct s_shell
 	char command[BUFFER_SIZE];
 	struct termios tty;
 	struct termios old_tty;
+	char redirect_is_open;
 }               t_shell;
 
 t_shell g_data;

@@ -1,5 +1,19 @@
 #include "shell.h"
 
+void print_redirect_info(int i)
+{
+	printf("FILENAME: |%s|\n", g_redirect_info[i].filename);
+	printf("flags: |%i|\n", g_redirect_info[i].flags);
+	printf("file_fd: |%i|\n", g_redirect_info[i].file_fd);
+	printf("reidrect_fd[0]: |%i|\n", g_redirect_info[i].redirect_fd[0]);
+	printf("reidrect_fd[1]: |%i|\n", g_redirect_info[i].redirect_fd[1]);
+	printf("redirect_to[0]: |%i|\n", g_redirect_info[i].redirect_to[0]);
+	printf("redirect_to[1]: |%i|\n", g_redirect_info[i].redirect_to[1]);
+	printf("redirection_direction: |%i|\n", g_redirect_info[i].redirection_direction);
+	printf("stdoutCopy: |%i|\n", g_redirect_info[i].stdoutCopy);
+	printf("close: |%i|\n\n", g_redirect_info[i].close ? 1 : 0);
+}
+
 int is_redirect(char **argv)
 {
 	int i;
@@ -7,6 +21,7 @@ int is_redirect(char **argv)
 	char quote;
 
 	i = 0;
+	//printf("is redirect func\n");
 	while (argv[i])
 	{
 		j = 0;
@@ -56,9 +71,74 @@ int is_str_redirect(char *str)
 
 void get_info(char *cmd, char *next_cmd)
 {
-		(void)cmd;
-		(void)next_cmd;
-		g_redirect_info[g_redIter].filename = "fdsa";
+	int i;
+
+	i = 0;
+	if (ft_isdigit(cmd[i]))
+	{
+		g_redirect_info[g_redIter].redirect_fd[0] = ft_atoi(cmd);
+		while (ft_isdigit(cmd[i]))
+			i++;
+	}
+	else if (cmd[i] == '&')
+	{
+		g_redirect_info[g_redIter].redirect_fd[0] = 1;
+		g_redirect_info[g_redIter].redirect_fd[1] = 2;
+		i++;
+	}
+	if (cmd[i] && cmd[i] == '>' && cmd[i + 1] == '>')
+	{
+		g_redirect_info[g_redIter].flags = TWO_ARROWS;
+		g_redirect_info[g_redIter].redirection_direction = RIGHT_ARR;
+	}
+	else if (cmd[i] == '<' && cmd[i + 1] == '<')
+	{
+		g_redirect_info[g_redIter].flags = TWO_ARROWS;
+		g_redirect_info[g_redIter].redirection_direction = LEFT_ARR;
+	}
+	else if (cmd[i] == '>')
+	{
+		g_redirect_info[g_redIter].flags = ONE_ARROW;
+		g_redirect_info[g_redIter].redirection_direction = RIGHT_ARR;
+	}
+	else if (cmd[i] == '<')
+	{
+		g_redirect_info[g_redIter].flags = ONE_ARROW;
+		g_redirect_info[g_redIter].redirection_direction = LEFT_ARR;
+	}
+	while (cmd[i] && (cmd[i] == '>' || cmd[i] == '<'))
+		i++;
+	if (cmd[i])
+	{
+		if (cmd[i] == '&')
+		{
+			i++;
+			if (cmd[i])
+			{
+				if (cmd[i] == '-')
+				{
+					g_redirect_info[g_redIter].close = 1;
+					i++;
+				}
+				else
+					g_redirect_info[g_redIter].redirect_to[0] = ft_atoi(&cmd[i]);
+				while (ft_isdigit(cmd[i]))
+					i++;
+				if (cmd[i])
+					g_redirect_info[g_redIter].filename = ft_strsub(cmd, i, ft_strlen(cmd));
+				else
+					g_redirect_info[g_redIter].filename = ft_strdup(next_cmd);
+			}
+			else
+			{
+				g_redirect_info[g_redIter].redirect_to[1] = 2;
+			}
+		}
+		else
+	 		g_redirect_info[g_redIter].filename = ft_strsub(cmd, i, ft_strlen(cmd));
+	}
+	else
+		g_redirect_info[g_redIter].filename = ft_strdup(next_cmd);
 }
 
 int redirections_nb(char **cmd)
@@ -92,7 +172,6 @@ int validate_redirection(char **cmd)
 	i = 0;
 	j = 0;
 	redirect_nb = redirections_nb(cmd);
-	printf("nb = %d\n", redirect_nb);
 	while (cmd[i])
 	{
 		if (is_str_redirect(cmd[i]))
@@ -120,6 +199,7 @@ int validate_redirection(char **cmd)
 					ft_putstr_fd("\n", 2);
 					return (1);
 				}
+				g_redIter++;
 			}
 		}
 		i++;
@@ -127,11 +207,32 @@ int validate_redirection(char **cmd)
 	return (0);
 }
 
-void redirect_open(void)
+void redirect_open(int i)
 {
-	g_redirect_info[g_redIter].file_fd = open(g_redirect_info[g_redIter].filename, g_redirect_info[g_redIter].flags, 0666);
-	g_redirect_info[g_redIter].stdoutCopy = dup(g_redirect_info[g_redIter].redirect_fd);
-	dup2(g_redirect_info[g_redIter].file_fd, g_redirect_info[g_redIter].redirect_fd);
+	print_redirect_info(i);
+	g_data.redirect_is_open = 1;
+	g_redirect_info[i].file_fd = open(g_redirect_info[i].filename, g_redirect_info[i].flags, 0666);
+	g_redirect_info[i].stdoutCopy = dup(g_redirect_info[i].redirect_fd[0]);
+	if (g_redirect_info[i].redirect_fd[1] >= 0)
+		g_redirect_info[i].stderrCopy = dup(g_redirect_info[i].redirect_fd[1]);
+	dup2(g_redirect_info[i].file_fd, g_redirect_info[i].redirect_fd[0]);
+}
+
+void redirect_close(int i)
+{
+	g_data.redirect_is_open = 0;
+	if (g_redirect_info[i].stdoutCopy >= 0)
+	{
+		dup2(g_redirect_info[i].stdoutCopy, g_redirect_info[i].redirect_fd[0]);
+		close(g_redirect_info[i].stdoutCopy);
+		close(g_redirect_info[i].file_fd);
+	}
+	if (g_redirect_info[i].stderrCopy >= 0)
+	{
+		dup2(g_redirect_info[i].stderrCopy, g_redirect_info[i].redirect_fd[1]);
+		close(g_redirect_info[i].stderrCopy);
+		close(g_redirect_info[i].file_fd);
+	}
 }
 
 int redirection_error(void)
@@ -170,24 +271,21 @@ void init_redirect(void)
 	int i;
 
 	i = 0;
+	g_redIter = 0;
 	while (i < MAX_REDIRECT)
 	{
 		g_redirect_info[i].filename = NULL;
 		g_redirect_info[i].flags = 0;
 		g_redirect_info[i].file_fd = -1;
-		g_redirect_info[i].redirect_fd = 1;
+		g_redirect_info[i].redirect_fd[0] = 1;
+		g_redirect_info[i].redirect_fd[1] = -1;
 		g_redirect_info[i].redirection_direction = 0;
 		g_redirect_info[i].stdoutCopy = -1;
+		g_redirect_info[i].stderrCopy = -1;
+		g_redirect_info[i].redirect_to[0] = 1;
+		g_redirect_info[i].redirect_to[1] = -1;
+		g_redirect_info[i].close = 0;
 		i++;
 	}
 }
 
-void redirect_close(void)
-{
-	if (g_redirect_info[g_redIter].stdoutCopy >= 0)
-	{
-		dup2(g_redirect_info[g_redIter].stdoutCopy, g_redirect_info[g_redIter].redirect_fd);
-		close(g_redirect_info[g_redIter].stdoutCopy);
-		close(g_redirect_info[g_redIter].file_fd);
-	}
-}

@@ -14,6 +14,20 @@
 
 int check_builtins(char **argv)
 {
+	if (is_redirect(argv) && !validate_redirection(argv))
+	{
+		for(int i = 0; i < g_redIter; i++)
+		{
+			redirect_open(i);
+			if (ft_strequ(argv[0], "echo"))
+			{
+					bi_echo(argv);
+			}
+			redirect_close(i);
+		}
+		return (1);
+	}
+		
 	if (ft_strequ(argv[0], "echo"))
 		return (bi_echo(argv));
 	else if (ft_strequ(argv[0], "exit"))

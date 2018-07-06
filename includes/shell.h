@@ -91,13 +91,15 @@ int is_redirect(char **argv);
 int is_str_redirect(char *str);
 void get_info(char *cmd, char *next_cmd);
 int validate_redirection(char **cmd);
-void redirect_open(void);
+void redirect_open(int i);
 int redirection_error(void);
 int redirection_regexp(char *str, char silen_mode);
 void init_redirect(void);
-void redirect_close(void);
+void redirect_close(int i);
 int redirections_nb(char **cmd);
 
+
+void print_redirect_info(int i);
 void var_dump(char **arr);
 void var_dump_arr(char ***arr);
 

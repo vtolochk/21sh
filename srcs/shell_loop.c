@@ -20,6 +20,7 @@ void annulment(void)
 	g_data.cursor = g_data.prompt_len;
 	ft_bzero(g_data.command, sizeof(g_data.command));
 	ft_bzero(&g_data.key[0], 8);
+	g_data.redirect_is_open = 0;
 	g_redIter = 0;
 }
 
