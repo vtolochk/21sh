@@ -164,6 +164,50 @@ char *get_full_path_to_file(char **argv)
 	return (full_path);
 }
 
+int check_binaries(char **cmd, char **environ)
+{
+	pid_t	pid;
+	char *full_path_to_file;
+	full_path_to_file = get_full_path_to_file(cmd);
+	if (full_path_to_file)
+	{
+		if (is_redirect(cmd) && !validate_redirection(cmd))
+		{
+			remove_redirection_from_cmd(&cmd);
+			for(int i = 0; i < g_redIter; i++)
+			{
+				pid = fork();
+				redirect_open(i);
+				if (pid == 0)
+				{
+					execve(full_path_to_file, cmd, environ);
+					redirect_close(i);
+					exit(0);
+				}
+				else
+				{
+					wait(&pid);
+					redirect_close(i);
+				}
+			}
+		}
+		else
+		{
+			pid = fork();
+			if (pid == 0)
+			{
+				execve(full_path_to_file, cmd, environ);
+				exit(0);
+			}
+			else
+			{
+				wait(&pid);
+			}
+		}
+		return (1);
+	}
+	return (0);
+}
 
 void    pipe_loop(char ***cmd)
 {
@@ -177,12 +221,13 @@ void    pipe_loop(char ***cmd)
 	pid = 0;
 	fd_in = 0;
 	environ = list_to_array();
-	init_redirect();
 	while (cmd[i] != NULL)
 	{
-		if (check_builtins(cmd[i]))
+		init_redirect();
+		if (check_builtins(cmd[i]) || check_binaries(cmd[i], environ))
 		{
 			i++;
+			destroy_redirect();
 			continue ;
 		}
 		pipe(pipe_fds);
@@ -208,6 +253,7 @@ void    pipe_loop(char ***cmd)
 			i++;
 		}
 	}
+	destroy_redirect();
 	ft_free_tab((void **)environ);
 	waitpid(pid, 0, 0);
 	kill(0, 0);

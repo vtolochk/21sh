@@ -44,7 +44,7 @@ typedef struct s_redirect
 	char *filename;
 	int flags;
 	int file_fd;
-	int redirect_to[2];
+	int redirect_to;
 	int redirect_from[2];
 	int redirect_from_copy[2];
 	int redirection_direction;

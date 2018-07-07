@@ -21,7 +21,6 @@ void annulment(void)
 	ft_bzero(g_data.command, sizeof(g_data.command));
 	ft_bzero(&g_data.key[0], 8);
 	g_data.redirect_is_open = 0;
-	g_redIter = 0;
 }
 
 void quoting(void)
