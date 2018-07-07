@@ -37,6 +37,6 @@ int bi_echo(char **argv)
 		i++;
 	}
 	write(STDOUT_FILENO, "\n", 1);
-	//write(2, "test 2 fd", 9); test
+	write(2, "test 2 fd\n", 10); //test
 	return (1);
 }

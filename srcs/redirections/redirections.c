@@ -11,6 +11,7 @@ void print_redirect_info(int i)
 	printf("redirect_to[1]: |%i|\n", g_redirect_info[i].redirect_to[1]);
 	printf("redirection_direction: |%i|\n", g_redirect_info[i].redirection_direction);
 	printf("redirect_from_copy[0]: |%i|\n", g_redirect_info[i].redirect_from_copy[0]);
+	printf("redirect_from_copy[1]: |%i|\n", g_redirect_info[i].redirect_from_copy[1]);
 	printf("close: |%i|\n", g_redirect_info[i].close ? 1 : 0);
 	printf("redirect to term |%i|\n\n",  g_redirect_info[i].redirect_to_term ? 1 : 0);
 }
@@ -220,38 +221,45 @@ int validate_redirection(char **cmd)
 
 void redirect_open(int i)
 {
-	print_redirect_info(i);
-
 	g_data.redirect_is_open = 1;
-
 	if (!g_redirect_info[i].redirect_to_term)
 	{
-		g_redirect_info[i].file_fd = open(g_redirect_info[i].filename, g_redirect_info[i].flags, 0666);
+			//print_redirect_info(i);
 		g_redirect_info[i].redirect_from_copy[0] = dup(g_redirect_info[i].redirect_from[0]);
-		if (g_redirect_info[i].redirect_from[1] >= 0)
+		if (g_redirect_info[i].redirect_from[1] > 0)
 			g_redirect_info[i].redirect_from_copy[1] = dup(g_redirect_info[i].redirect_from[1]);
+		g_redirect_info[i].file_fd = open(g_redirect_info[i].filename, g_redirect_info[i].flags, 0666);
 		dup2(g_redirect_info[i].file_fd, g_redirect_info[i].redirect_from[0]);
+		if (g_redirect_info[i].redirect_from_copy[1] > 0)
+		{
+			dup2(g_redirect_info[i].redirect_from[0], g_redirect_info[i].redirect_from[1]);
+			close(g_redirect_info[i].file_fd);
+		}
 	}
 	else
 	{
 		g_redirect_info[i].redirect_from_copy[0] = dup(g_redirect_info[i].redirect_from[0]);
-		if (g_redirect_info[i].redirect_from[1] >= 0)
+		if (g_redirect_info[i].redirect_from_copy[1] > 0)
 			g_redirect_info[i].redirect_from_copy[1] = dup(g_redirect_info[i].redirect_from[1]);
 		dup2(g_redirect_info[i].redirect_to[0], g_redirect_info[i].redirect_from[0]);
-		dup2(g_redirect_info[i].redirect_to[0], g_redirect_info[i].redirect_from[1]); // is it legal???) No.
-		// if two redirections need to handle it by execute 2 times ....
+		if (g_redirect_info[i].redirect_from_copy[1] > 0)
+		{
+			dup2(g_redirect_info[i].redirect_from[0], g_redirect_info[i].redirect_from[1]);
+			close(g_redirect_info[i].redirect_to[0]);
+		}
+		//printf("now\n");
 	}
 }
 
 void redirect_close(int i)
 {
+	//print_redirect_info(i);
 	g_data.redirect_is_open = 0;
-
 	if (!g_redirect_info[i].redirect_to_term)
 	{
 		dup2(g_redirect_info[i].redirect_from_copy[0], g_redirect_info[i].redirect_from[0]);
 		close(g_redirect_info[i].redirect_from_copy[0]);
-		if (g_redirect_info[i].redirect_from_copy[1] >= 0)
+		if (g_redirect_info[i].redirect_from_copy[1] > 0)
 		{
 			dup2(g_redirect_info[i].redirect_from_copy[1], g_redirect_info[i].redirect_from[1]);
 			close(g_redirect_info[i].redirect_from_copy[1]);
@@ -262,11 +270,12 @@ void redirect_close(int i)
 	{
 		dup2(g_redirect_info[i].redirect_from_copy[0], g_redirect_info[i].redirect_from[0]);
 		close(g_redirect_info[i].redirect_from_copy[0]);
-		if (g_redirect_info[i].redirect_from_copy[1] >= 0)
+		if (g_redirect_info[i].redirect_from_copy[1] > 0)
 		{
 			dup2(g_redirect_info[i].redirect_from_copy[1], g_redirect_info[i].redirect_from[1]);
 			close(g_redirect_info[i].redirect_from_copy[1]);
 		}
+		//close(g_redirect_info[i].redirect_to[0]); // i dont know :D :) :) :)
 	}
 }
 
