@@ -220,27 +220,37 @@ void    pipe_loop(char ***cmd)
 	i = 0;
 	pid = 0;
 	fd_in = 0;
+		int fd ;
 	environ = list_to_array();
 	while (cmd[i] != NULL)
 	{
-		//init_redirect();
-		var_dump(cmd[i]);
-		if (check_builtins(cmd[i])) //|| check_binaries(cmd[i], environ))
+		init_redirect();
+		if (check_builtins(cmd[i]) || check_binaries(cmd[i], environ))
 		{
 			i++;
+			
 			//destroy_redirect();
-			continue ;
+			//continue ;
 		}
 		printf("funny \n");
 		pipe(pipe_fds);
 		pid = fork();
 		if (pid == 0)
 		{
-			printf("name: %s\n", g_redirect_info[g_redIter - 1].filename);
-			dup2(fd_in, 0);
+			int fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
+			if (fd)
+				dup2(fd, 0);
+			else
+				dup2(fd_in, 0);
 			close(pipe_fds[0]);
 			if (cmd[i + 1] != NULL)
 				dup2(pipe_fds[1], 1);
+			if (g_redIter > 0)
+			{
+				printf("name: %s\n", g_redirect_info[g_redIter - 1].filename);
+				
+			}
+				
 			char *full_path_to_file = get_full_path_to_file(cmd[i]);
 			if (full_path_to_file)
 			{
@@ -252,7 +262,10 @@ void    pipe_loop(char ***cmd)
 		else
 		{
 			close(pipe_fds[1]);
-			fd_in = pipe_fds[0];
+			if (fd)
+				fd = pipe_fds[0];
+			else
+				fd_in = pipe_fds[0];
 			i++;
 		}
 	}
