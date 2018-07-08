@@ -41,6 +41,7 @@ static void quote_exit(char **last, char **old)
 	ft_strcpy(g_data.command, *last);
 	ft_strdel(old);
 	ft_strdel(last);
+	write(1, "\n", 1);
 }
 
 char check_unclosing(void)
@@ -79,7 +80,7 @@ void wait_quote(char quote)
 
 	old = ft_strdup(g_data.command);
 	annulment();
-	print_qoute_prompt();
+	ft_putstr_fd("quote > ", 1);
 	while (1)
 	{
 		ft_bzero(g_data.key, sizeof(g_data.key));
