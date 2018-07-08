@@ -90,6 +90,9 @@ void wait_quote(char quote)
 			temp = old;
 			old  = ft_strjoin(old, g_data.command);
 			ft_strdel(&temp);
+			temp = old;
+			old = ft_strjoin(old, "\n");
+			ft_strdel(&temp);
 			print_qoute_prompt();
 			annulment();
 			continue ;
