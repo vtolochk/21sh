@@ -51,6 +51,7 @@ srcs/substitute_tild.c \
 srcs/substitute_env_var.c \
 srcs/redirections/redirections.c \
 srcs/count_sign.c \
+srcs/shell_engine.c \
 
 
 OBJ = $(SRCS:.c=.o)

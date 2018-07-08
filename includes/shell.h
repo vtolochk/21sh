@@ -101,6 +101,10 @@ void destroy_redirect(void);
 void remove_redirection_from_cmd(char ***cmd);
 
 
+int check_binaries(char **cmd, char **environ);
+void    shell_engine(char ***cmd);
+char *get_full_path_to_file(char **argv);
+
 
 void print_redirect_info(int i);
 void var_dump(char **arr);

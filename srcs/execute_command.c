@@ -166,14 +166,16 @@ char *get_full_path_to_file(char **argv)
 
 int check_binaries(char **cmd, char **environ)
 {
+	int i;
 	pid_t	pid;
 	char *full_path_to_file;
 
+	i = 0;
 	full_path_to_file = get_full_path_to_file(cmd);
 	if (full_path_to_file)
 	{
 		remove_redirection_from_cmd(&cmd);
-		for(int i = 0; i < g_redIter; i++)
+		while(i < g_redIter)
 		{
 			pid = fork();
 			redirect_open(i);
@@ -188,268 +190,11 @@ int check_binaries(char **cmd, char **environ)
 				wait(&pid);
 				redirect_close(i);
 			}
+			i++;
 		}
 		return (1);
 	}
 	return (0);
-}
-
-// void    pipe_loop(char ***cmd)
-// {
-// 	int i;
-// 	pid_t pid;
-// 	int   fd_in;
-// 	int   pipe_fds[2];
-// 	char **environ;
-
-// 	i = 0;
-// 	pid = 0;
-// 	fd_in = 0;
-// 		int fd ;
-// 	environ = list_to_array();
-// 	while (cmd[i] != NULL)
-// 	{
-// 		init_redirect();
-// 		if (check_builtins(cmd[i]) || check_binaries(cmd[i], environ))
-// 		{
-			
-// 				i++;
-// 				if (g_redIter > 0)
-// 					destroy_redirect();
-// 				continue ;
-			
-// 		}
-// 		pipe(pipe_fds);
-// 		pid = fork();
-// 		if (pid == 0)
-// 		{
-// 			if (g_redIter > 0)
-// 			{
-// 				fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
-// 			}
-// 			if (fd)
-// 				dup2(fd, 0);
-// 			else
-// 				dup2(fd_in, 0);
-// 			close(pipe_fds[0]);
-// 			if (cmd[i + 1] != NULL)
-// 				dup2(pipe_fds[1], 1);
-// 			char *full_path_to_file = get_full_path_to_file(cmd[i]);
-// 			if (full_path_to_file)
-// 			{
-// 				execve(full_path_to_file, cmd[i], environ);
-// 			}
-// 			ft_strdel(&full_path_to_file);
-// 			exit(0);
-// 		}
-// 		else
-// 		{
-// 			close(pipe_fds[1]);
-// 			if (fd)
-// 				fd = pipe_fds[0];
-// 			else
-// 				fd_in = pipe_fds[0];
-// 			i++;
-// 		}
-// 	}
-// 	destroy_redirect();
-// 	ft_free_tab((void **)environ);
-// 	waitpid(pid, 0, 0);
-// 	kill(0, 0);
-// }
-
-// int pipe_helper(char ***cmd, int *i, char **environ)
-// {
-// 	pid_t pid;
-// 	int   fd_in;
-// 	int   pipe_fds[2];
-// 	int fd = 0;
-
-// 	pid = 0;
-// 	 fd_in = 0;
-// 	printf("am i here\n");
-// 	pipe(pipe_fds);
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		if (g_redIter > 0)
-// 		{
-// 			printf("|%s|\n", g_redirect_info[g_redIter - 1].filename);
-// 			fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
-// 		}
-// 		if (fd)
-// 			dup2(fd, 0);
-// 		else
-// 			dup2(fd_in, 0);
-// 		close(pipe_fds[0]);
-// 		if (cmd[*i + 1] != NULL)
-// 			dup2(pipe_fds[1], 1);
-// 		char *full_path_to_file = get_full_path_to_file(cmd[(*i)]);
-// 		if (full_path_to_file)
-// 		{
-// 			execve(full_path_to_file, cmd[(*i)], environ);
-// 		}
-// 		ft_strdel(&full_path_to_file);
-// 		exit(0);
-// 	}
-// 	else
-// 	{
-// 		close(pipe_fds[1]);
-// 		if (fd)
-// 			fd = pipe_fds[0];
-// 		else
-// 			fd_in = pipe_fds[0];
-// 		(*i)++;
-// 	}
-// 	return (pid);
-// }
-
-// int is_pipe(char ***cmd, int i, char **environ)
-// {
-// 	pid_t pid;
-// 	int   pipe_fds[2];
-// 	int fd = 0;
-// 	int   fd_in = 0;
-// 	char *full_path_to_file;
-
-// 	//var_dump_arr(cmd);
-// 	pipe(pipe_fds);
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		//print_redirect_info(g_redIter - 1);
-// 		if (g_redIter > 0)
-// 		{
-// 			if (g_redirect_info[g_redIter - 1].filename)
-// 				fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
-// 		}
-// 		//printf("fd = %d\n", fd);
-// 		//exit(0);
-// 		if (fd > 0)
-// 			dup2(fd, 0);
-// 		else
-// 			dup2(fd_in, 0);
-// 		close(pipe_fds[0]);
-// 		if (cmd[i + 1] != NULL)
-// 			dup2(pipe_fds[1], 1);
-// 		full_path_to_file = get_full_path_to_file(cmd[i]);
-// 		if (full_path_to_file)
-// 		{
-// 			execve(full_path_to_file, cmd[i], environ);
-// 		}
-// 		ft_strdel(&full_path_to_file);
-// 		exit(0);
-// 	}
-// 	else
-// 	{
-// 		close(pipe_fds[1]);
-// 		if (fd)
-// 			fd = pipe_fds[0];
-// 		else
-// 			fd_in = pipe_fds[0];
-// 	}
-// 	return pid;
-// }
-
-void    pipe_loop(char ***cmd)
-{
-	pid_t pid;
-	int i;
-	char **environ;
-	int   pipe_fds[2];
-	int fd = 0;
-	int   fd_in = 0;
-
-	i = 0;
-	environ = list_to_array();
-	init_redirect();
-	while (cmd[i])
-	{
-		if (is_redirect(cmd[i]) && !validate_redirection(cmd[i]))
-		{
-			if (check_builtins(cmd[i]))
-			{
-				i++;
-				continue;
-			}
-			else if (!g_redirect_info[g_redIter - 1].redirect_to_term && check_binaries(cmd[i], environ))
-			{
-				i++;
-				continue;
-			}
-			else if (g_redirect_info[g_redIter - 1].redirect_to_term)
-			{
-				remove_redirection_from_cmd(&cmd[i]);
-				pipe(pipe_fds);
-					pid = fork();
-					if (pid == 0)
-					{
-						dup2(fd_in, 0);
-						close(pipe_fds[0]);
-						if (cmd[i + 1] != NULL)
-							dup2(pipe_fds[1], g_redirect_info[g_redIter - 1].redirect_to);
-						char *full_path_to_file = get_full_path_to_file(cmd[i]);
-						if (full_path_to_file)
-						{
-							execve(full_path_to_file, cmd[i], environ);
-						}
-						ft_strdel(&full_path_to_file);
-						exit(0);
-					}
-					else
-					{
-						close(pipe_fds[1]);
-						fd_in = pipe_fds[0];
-						i++;
-					}
-			}
-		}
-		else
-		{
-			if (check_builtins(cmd[i]))
-			{
-				i++;
-				continue;
-			}
-			pipe(pipe_fds);
-			pid = fork();
-			if (pid == 0)
-			{
-				if (g_redIter > 0)
-				{
-					if (!g_redirect_info[g_redIter - 1].redirect_to_term)
-						fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
-				}
-				if (fd > 0)
-					dup2(fd, 0);
-				else
-					dup2(fd_in, 0);
-				close(pipe_fds[0]);
-				if (cmd[i + 1] != NULL)
-					dup2(pipe_fds[1], g_redirect_info[g_redIter - 1].redirect_to);
-				char *full_path_to_file = get_full_path_to_file(cmd[i]);
-				if (full_path_to_file)
-				{
-					execve(full_path_to_file, cmd[i], environ);
-				}
-				ft_strdel(&full_path_to_file);
-				exit(0);
-			}
-			else
-			{
-				close(pipe_fds[1]);
-				if (fd)
-					fd = pipe_fds[0];
-				else
-					fd_in = pipe_fds[0];
-				i++;
-			}
-		}
-	}
-	destroy_redirect();
-	ft_free_tab((void **)environ);
-	waitpid(pid, 0, 0);
-	kill(0, 0);
 }
 
 char ***form_commands(char **splited)
@@ -477,7 +222,7 @@ void pipes_and_redirections(char **splited)
 
 	i = 0;
 	commands = form_commands(splited);
-	pipe_loop(commands);
+	shell_engine(commands);
 	while (commands[i])
 		ft_free_tab((void **)commands[i++]);
 	free(commands);
