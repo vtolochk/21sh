@@ -101,6 +101,7 @@ void destroy_redirect(void);
 void remove_redirection_from_cmd(char ***cmd);
 
 
+
 void print_redirect_info(int i);
 void var_dump(char **arr);
 void var_dump_arr(char ***arr);

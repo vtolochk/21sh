@@ -168,40 +168,25 @@ int check_binaries(char **cmd, char **environ)
 {
 	pid_t	pid;
 	char *full_path_to_file;
+
 	full_path_to_file = get_full_path_to_file(cmd);
 	if (full_path_to_file)
 	{
-		if (is_redirect(cmd) && !validate_redirection(cmd))
-		{
-			remove_redirection_from_cmd(&cmd);
-			for(int i = 0; i < g_redIter; i++)
-			{
-				pid = fork();
-				redirect_open(i);
-				if (pid == 0)
-				{
-					execve(full_path_to_file, cmd, environ);
-					redirect_close(i);
-					exit(0);
-				}
-				else
-				{
-					wait(&pid);
-					redirect_close(i);
-				}
-			}
-		}
-		else
+		remove_redirection_from_cmd(&cmd);
+		for(int i = 0; i < g_redIter; i++)
 		{
 			pid = fork();
+			redirect_open(i);
 			if (pid == 0)
 			{
 				execve(full_path_to_file, cmd, environ);
+				redirect_close(i);
 				exit(0);
 			}
 			else
 			{
 				wait(&pid);
+				redirect_close(i);
 			}
 		}
 		return (1);
@@ -209,64 +194,256 @@ int check_binaries(char **cmd, char **environ)
 	return (0);
 }
 
+// void    pipe_loop(char ***cmd)
+// {
+// 	int i;
+// 	pid_t pid;
+// 	int   fd_in;
+// 	int   pipe_fds[2];
+// 	char **environ;
+
+// 	i = 0;
+// 	pid = 0;
+// 	fd_in = 0;
+// 		int fd ;
+// 	environ = list_to_array();
+// 	while (cmd[i] != NULL)
+// 	{
+// 		init_redirect();
+// 		if (check_builtins(cmd[i]) || check_binaries(cmd[i], environ))
+// 		{
+			
+// 				i++;
+// 				if (g_redIter > 0)
+// 					destroy_redirect();
+// 				continue ;
+			
+// 		}
+// 		pipe(pipe_fds);
+// 		pid = fork();
+// 		if (pid == 0)
+// 		{
+// 			if (g_redIter > 0)
+// 			{
+// 				fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
+// 			}
+// 			if (fd)
+// 				dup2(fd, 0);
+// 			else
+// 				dup2(fd_in, 0);
+// 			close(pipe_fds[0]);
+// 			if (cmd[i + 1] != NULL)
+// 				dup2(pipe_fds[1], 1);
+// 			char *full_path_to_file = get_full_path_to_file(cmd[i]);
+// 			if (full_path_to_file)
+// 			{
+// 				execve(full_path_to_file, cmd[i], environ);
+// 			}
+// 			ft_strdel(&full_path_to_file);
+// 			exit(0);
+// 		}
+// 		else
+// 		{
+// 			close(pipe_fds[1]);
+// 			if (fd)
+// 				fd = pipe_fds[0];
+// 			else
+// 				fd_in = pipe_fds[0];
+// 			i++;
+// 		}
+// 	}
+// 	destroy_redirect();
+// 	ft_free_tab((void **)environ);
+// 	waitpid(pid, 0, 0);
+// 	kill(0, 0);
+// }
+
+// int pipe_helper(char ***cmd, int *i, char **environ)
+// {
+// 	pid_t pid;
+// 	int   fd_in;
+// 	int   pipe_fds[2];
+// 	int fd = 0;
+
+// 	pid = 0;
+// 	 fd_in = 0;
+// 	printf("am i here\n");
+// 	pipe(pipe_fds);
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		if (g_redIter > 0)
+// 		{
+// 			printf("|%s|\n", g_redirect_info[g_redIter - 1].filename);
+// 			fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
+// 		}
+// 		if (fd)
+// 			dup2(fd, 0);
+// 		else
+// 			dup2(fd_in, 0);
+// 		close(pipe_fds[0]);
+// 		if (cmd[*i + 1] != NULL)
+// 			dup2(pipe_fds[1], 1);
+// 		char *full_path_to_file = get_full_path_to_file(cmd[(*i)]);
+// 		if (full_path_to_file)
+// 		{
+// 			execve(full_path_to_file, cmd[(*i)], environ);
+// 		}
+// 		ft_strdel(&full_path_to_file);
+// 		exit(0);
+// 	}
+// 	else
+// 	{
+// 		close(pipe_fds[1]);
+// 		if (fd)
+// 			fd = pipe_fds[0];
+// 		else
+// 			fd_in = pipe_fds[0];
+// 		(*i)++;
+// 	}
+// 	return (pid);
+// }
+
+// int is_pipe(char ***cmd, int i, char **environ)
+// {
+// 	pid_t pid;
+// 	int   pipe_fds[2];
+// 	int fd = 0;
+// 	int   fd_in = 0;
+// 	char *full_path_to_file;
+
+// 	//var_dump_arr(cmd);
+// 	pipe(pipe_fds);
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		//print_redirect_info(g_redIter - 1);
+// 		if (g_redIter > 0)
+// 		{
+// 			if (g_redirect_info[g_redIter - 1].filename)
+// 				fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
+// 		}
+// 		//printf("fd = %d\n", fd);
+// 		//exit(0);
+// 		if (fd > 0)
+// 			dup2(fd, 0);
+// 		else
+// 			dup2(fd_in, 0);
+// 		close(pipe_fds[0]);
+// 		if (cmd[i + 1] != NULL)
+// 			dup2(pipe_fds[1], 1);
+// 		full_path_to_file = get_full_path_to_file(cmd[i]);
+// 		if (full_path_to_file)
+// 		{
+// 			execve(full_path_to_file, cmd[i], environ);
+// 		}
+// 		ft_strdel(&full_path_to_file);
+// 		exit(0);
+// 	}
+// 	else
+// 	{
+// 		close(pipe_fds[1]);
+// 		if (fd)
+// 			fd = pipe_fds[0];
+// 		else
+// 			fd_in = pipe_fds[0];
+// 	}
+// 	return pid;
+// }
+
 void    pipe_loop(char ***cmd)
 {
-	int i;
 	pid_t pid;
-	int   fd_in;
-	int   pipe_fds[2];
+	int i;
 	char **environ;
+	int   pipe_fds[2];
+	int fd = 0;
+	int   fd_in = 0;
 
 	i = 0;
-	pid = 0;
-	fd_in = 0;
-		int fd ;
 	environ = list_to_array();
-	while (cmd[i] != NULL)
+	init_redirect();
+	while (cmd[i])
 	{
-		init_redirect();
-		if (check_builtins(cmd[i]) || check_binaries(cmd[i], environ))
+		if (is_redirect(cmd[i]) && !validate_redirection(cmd[i]))
 		{
-			i++;
-			
-			//destroy_redirect();
-			//continue ;
-		}
-		printf("funny \n");
-		pipe(pipe_fds);
-		pid = fork();
-		if (pid == 0)
-		{
-			int fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
-			if (fd)
-				dup2(fd, 0);
-			else
-				dup2(fd_in, 0);
-			close(pipe_fds[0]);
-			if (cmd[i + 1] != NULL)
-				dup2(pipe_fds[1], 1);
-			if (g_redIter > 0)
+			if (check_builtins(cmd[i]))
 			{
-				printf("name: %s\n", g_redirect_info[g_redIter - 1].filename);
-				
+				i++;
+				continue;
 			}
-				
-			char *full_path_to_file = get_full_path_to_file(cmd[i]);
-			if (full_path_to_file)
+			else if (!g_redirect_info[g_redIter - 1].redirect_to_term && check_binaries(cmd[i], environ))
 			{
-				execve(full_path_to_file, cmd[i], environ);
+				i++;
+				continue;
 			}
-			ft_strdel(&full_path_to_file);
-			exit(0);
+			else if (g_redirect_info[g_redIter - 1].redirect_to_term)
+			{
+				remove_redirection_from_cmd(&cmd[i]);
+				pipe(pipe_fds);
+					pid = fork();
+					if (pid == 0)
+					{
+						dup2(fd_in, 0);
+						close(pipe_fds[0]);
+						if (cmd[i + 1] != NULL)
+							dup2(pipe_fds[1], g_redirect_info[g_redIter - 1].redirect_to);
+						char *full_path_to_file = get_full_path_to_file(cmd[i]);
+						if (full_path_to_file)
+						{
+							execve(full_path_to_file, cmd[i], environ);
+						}
+						ft_strdel(&full_path_to_file);
+						exit(0);
+					}
+					else
+					{
+						close(pipe_fds[1]);
+						fd_in = pipe_fds[0];
+						i++;
+					}
+			}
 		}
 		else
 		{
-			close(pipe_fds[1]);
-			if (fd)
-				fd = pipe_fds[0];
+			if (check_builtins(cmd[i]))
+			{
+				i++;
+				continue;
+			}
+			pipe(pipe_fds);
+			pid = fork();
+			if (pid == 0)
+			{
+				if (g_redIter > 0)
+				{
+					if (!g_redirect_info[g_redIter - 1].redirect_to_term)
+						fd = open(g_redirect_info[g_redIter - 1].filename, O_RDONLY);
+				}
+				if (fd > 0)
+					dup2(fd, 0);
+				else
+					dup2(fd_in, 0);
+				close(pipe_fds[0]);
+				if (cmd[i + 1] != NULL)
+					dup2(pipe_fds[1], g_redirect_info[g_redIter - 1].redirect_to);
+				char *full_path_to_file = get_full_path_to_file(cmd[i]);
+				if (full_path_to_file)
+				{
+					execve(full_path_to_file, cmd[i], environ);
+				}
+				ft_strdel(&full_path_to_file);
+				exit(0);
+			}
 			else
-				fd_in = pipe_fds[0];
-			i++;
+			{
+				close(pipe_fds[1]);
+				if (fd)
+					fd = pipe_fds[0];
+				else
+					fd_in = pipe_fds[0];
+				i++;
+			}
 		}
 	}
 	destroy_redirect();
