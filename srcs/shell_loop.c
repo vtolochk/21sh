@@ -73,13 +73,14 @@ void shell_loop(void)
 {
 	int n;
 
-
 	while (13)
 	{
 		get_screen_size();
 		get_rows();
 		signals();
 		n = read(STDIN_FILENO, &g_data.key, sizeof(g_data.key));
+		if (n == 0)
+			printf("ctrl D");
 		if (g_data.key[0] == 4 && !ft_strlen(g_data.command))
 			shell_exit();		
 		if (g_data.key[0] == ENTER)

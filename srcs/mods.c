@@ -22,6 +22,8 @@ int	set_shell_mode(void)
 	g_data.tty.c_lflag &= ~(ECHO | ICANON);
 	g_data.tty.c_cc[VMIN] = 1;
 	g_data.tty.c_cc[VTIME] = 0;
+	//g_data.tty.c_cc[VEOF]  = 3; // signals ...
+  	//g_data.tty.c_cc[VINTR] = 4;
 	tcsetattr(0, TCSAFLUSH, &g_data.tty);
 	return (OK);
 }
