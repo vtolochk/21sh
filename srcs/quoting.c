@@ -100,4 +100,3 @@ void wait_quote(char quote)
 	}
 	quote_exit(&last, &old);
 }
-
