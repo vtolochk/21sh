@@ -63,6 +63,7 @@ void    shell_engine(char ***cmd)
 			pid = fork();
 			if (pid == 0)
 			{
+				child_signals();
 				if (g_redIter > 0)
 				{
 					if (!g_redirect_info[g_redIter - 1].redirect_to_term)

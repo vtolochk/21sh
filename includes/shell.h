@@ -87,6 +87,8 @@ int		count_sign(char *str, char sign);
 int		is_dir(char *full_path);
 int		is_real_file(char *dir, char *name);
 
+void			child_signals(void);
+
 int is_redirect(char **argv);
 int is_str_redirect(char *str);
 int get_info(char *cmd, char *next_cmd);

@@ -42,3 +42,16 @@ void			signals(void)
 	signal(SIGKILL, sig_processing);
 	signal(SIGTERM, sig_processing);
 }
+
+void			child_signals(void)
+{
+	signal(SIGWINCH, SIG_DFL);
+	signal(SIGINT,  SIG_DFL);
+	signal(SIGSTOP,  SIG_DFL);
+	signal(SIGCONT,  SIG_DFL);
+	signal(SIGABRT,  SIG_DFL);
+	signal(SIGQUIT,  SIG_DFL);
+	signal(SIGTSTP,  SIG_DFL);
+	signal(SIGKILL,  SIG_DFL);
+	signal(SIGTERM,  SIG_DFL);
+}
